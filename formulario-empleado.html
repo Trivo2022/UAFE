@@ -143,6 +143,8 @@ const DD_REFORZADA = [
 ];
 
 // Campos del formulario anterior + solo lo nuevo que exige la Res. UAFE-DG-2026-0017 (Arts. 21 y 22)
+const CARGOS = 'un cargo de elección popular, un cargo público dentro del nivel jerárquico superior o un cargo de responsabilidad política, en el Ecuador o en el extranjero';
+const CASADO = {f:'estadoCivil', v:['Casado/a','Unión libre','Separado/a']};
 const CARGO_PEP = '¿Usted desempeña o ha desempeñado un cargo de elección popular, un cargo público dentro del nivel jerárquico superior o un cargo de responsabilidad política, en el Ecuador o en el extranjero?';
 const CFG = {
   key: 'netbroker_kye_v2b',
@@ -156,7 +158,7 @@ const CFG = {
       {id:'fechaIngreso', l:'Fecha de ingreso', t:'date', s:2, r:1}, {id:'fechaAct', l:'Fecha de actualización', t:'date', s:2}, {id:'cargo', l:'Cargo que actualmente desempeña', t:'text', s:2, r:1},
       {id:'calidad', l:'Calidad (Art. 22)', t:'radio', o:['Empleado','Socio / accionista','Representante legal','Administrador / apoderado'], s:6, r:1},
     ]}]},
-    {title:'I. Datos personales', blocks:[{fields:[
+    {title:'Datos personales', blocks:[{fields:[
       {id:'apellido1', l:'Primer apellido', t:'text', s:2, r:1}, {id:'apellido2', l:'Segundo apellido', t:'text', s:2}, {id:'nombres', l:'Nombres completos', t:'text', s:2, r:1},
       {id:'tipoId', l:'Tipo de identificación', t:'radio', o:['Cédula','Pasaporte'], s:3, r:1}, {id:'numId', l:'Número de identificación', t:'text', s:3, r:1},
       {id:'nacionalidad', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'lugarNac', l:'Lugar de nacimiento', t:'text', s:2, r:1}, {id:'fechaNac', l:'Fecha de nacimiento', t:'date', s:2, r:1},
@@ -164,45 +166,46 @@ const CFG = {
       {id:'sepConyugal', l:'Separación de la sociedad conyugal', t:'radio', o:SN, s:3, r:1}, {id:'sexo', l:'Sexo', t:'radio', o:['Femenino','Masculino'], s:3, r:1},
       {id:'profesion', l:'Profesión u oficio (Art. 21.4)', t:'text', s:6, r:1},
     ]}]},
-    {title:'II. Identidad personal de los accionistas o socios', note:'Solo si el socio o accionista es persona jurídica y posee el 25% o más del capital social.', blocks:[
+    {title:'Identidad personal de los accionistas o socios', dep:{f:'calidad', v:'Socio / accionista'}, note:'Solo si el socio o accionista es persona jurídica y posee el 25% o más del capital social.', blocks:[
       {table:{id:'acc', cols:['Apellidos y nombres','Cédula / pasaporte / RUC','% participación','Nacionalidad','Actividad / cargo','Dirección','Teléfono / celular'], rows:2}}]},
-    {title:'III. Información de residencia', blocks:[{fields:[
+    {title:'Información de residencia', blocks:[{fields:[
       {id:'pais', l:'País', t:'text', s:2, r:1}, {id:'provincia', l:'Provincia', t:'text', s:2, r:1}, {id:'canton', l:'Cantón', t:'text', s:2, r:1},
       {id:'parroquia', l:'Parroquia', t:'text', s:2, r:1}, {id:'sector', l:'Sector (Art. 21.7)', t:'text', s:2, r:1}, {id:'callePrincipal', l:'Calle principal', t:'text', s:2, r:1},
       {id:'numeracion', l:'Numeración', t:'text', s:2, r:1}, {id:'calleSecundaria', l:'Calle secundaria', t:'text', s:2, r:1}, {id:'referencia', l:'Referencia de ubicación', t:'text', s:2, r:1},
       {id:'telDom', l:'Teléfono domicilio', t:'tel', s:2}, {id:'celular', l:'Teléfono celular', t:'tel', s:2, r:1}, {id:'correo', l:'Correo electrónico personal', t:'email', s:2, r:1},
       {id:'correoInst', l:'Correo institucional (Art. 21.8)', t:'email', s:6, r:1},
     ]}]},
-    {title:'IV. Información del cónyuge o conviviente', note:'Llene solo si aplica.', blocks:[{fields:[
+    {title:'Información del cónyuge o conviviente', dep:CASADO, blocks:[{fields:[
       {id:'conyApellido1', l:'Primer apellido', t:'text', s:2}, {id:'conyApellido2', l:'Segundo apellido', t:'text', s:2}, {id:'conyNombres', l:'Nombres completos', t:'text', s:2},
       {id:'conyTipoId', l:'Tipo de identificación', t:'radio', o:['Cédula','Pasaporte'], s:3}, {id:'conyId', l:'Número de identificación', t:'text', s:3},
       {id:'conyNac', l:'Nacionalidad', t:'text', s:2}, {id:'conyLugarNac', l:'Lugar de nacimiento', t:'text', s:2}, {id:'conyFechaNac', l:'Fecha de nacimiento', t:'date', s:2},
       {id:'conyTrabajo', l:'Lugar de trabajo', t:'text', s:2}, {id:'conyCargo', l:'Cargo', t:'text', s:2}, {id:'conyCel', l:'Teléfono celular', t:'tel', s:2},
       {id:'conyActividades', l:'Actividades que desempeña (Art. 21.3)', t:'text', s:6},
     ]}]},
-    {title:'V. Información complementaria', blocks:[{fields:[
+    {title:'Información complementaria', blocks:[{fields:[
       {id:'emerNombre', l:'Contacto en caso de emergencia: apellidos y nombres', t:'text', s:3, r:1}, {id:'emerParentesco', l:'Parentesco', t:'text', s:1, r:1}, {id:'emerCel', l:'Teléfono celular', t:'tel', s:2, r:1},
-    ]}, {table:{id:'hijos', title:'Hijos menores de 18 años', cols:['Número de identificación','Apellidos y nombres','Fecha de nacimiento','Lugar de nacimiento','Edad'], rows:2}}]},
-    {title:'VI. Actividad económica adicional', note:'Solo si usted o su cónyuge realizan actividades adicionales a su trabajo en relación de dependencia.', blocks:[
+      {id:'tieneHijos', l:'¿Tiene hijos menores de 18 años?', t:'radio', o:SN, s:6, r:1},
+    ]}, {table:{id:'hijos', title:'Hijos menores de 18 años', cols:['Número de identificación','Apellidos y nombres','Fecha de nacimiento','Lugar de nacimiento','Edad'], types:['text','text','date','text','text'], rows:2, req:1, dep:{f:'tieneHijos', v:'Sí'}}}]},
+    {title:'Actividad económica adicional', note:'Solo si usted o su cónyuge realizan actividades adicionales a su trabajo en relación de dependencia.', blocks:[
       {table:{id:'adicional', cols:['Persona (empleado / cónyuge)','Nombre empresa / negocio','Actividad económica','RUC','Dirección','Teléfono','Cargo'], rows:2}}]},
-    {title:'VII. Declaración de Persona Expuesta Políticamente', blocks:[{fields:[
+    {title:'Declaración de Persona Expuesta Políticamente', blocks:[{fields:[
       {id:'esPep', l:CARGO_PEP, t:'radio', o:SN, s:6, r:1},
       {id:'pepCargo', l:'Cargo', t:'text', s:2, rd:1, dep:{f:'esPep', v:'Sí'}}, {id:'pepFechaNom', l:'Fecha de nombramiento', t:'date', s:2, rd:1, dep:{f:'esPep', v:'Sí'}},
       {id:'pepEnFunciones', l:'¿A la presente fecha se encuentra en funciones?', t:'radio', o:SN, s:2, rd:1, dep:{f:'esPep', v:'Sí'}},
       {id:'pepFechaFin', l:'Fecha de culminación del cargo (si no está en funciones)', t:'date', s:6, dep:{f:'esPep', v:'Sí'}},
-      {id:'famPep', l:'¿Algún familiar suyo hasta el 4º grado de consanguinidad o 2º de afinidad desempeña o ha desempeñado alguno de esos cargos?', t:'radio', o:SN, s:6, r:1},
-    ]}, {table:{id:'famPeps', cols:['Apellidos y nombres','Cargo','Parentesco'], rows:2, req:1, dep:{f:'famPep', v:'Sí'}}},
-      {fields:[{id:'colPep', l:'¿Usted ha trabajado, colaborado o es socio de alguien que desempeña o ha desempeñado alguno de esos cargos?', t:'radio', o:SN, s:6, r:1}]},
-      {table:{id:'colPeps', cols:['Apellidos y nombres','Cargo de la persona con la que colaboró','Cargo que usted ejerce o ejerció con la persona'], rows:2, req:1, dep:{f:'colPep', v:'Sí'}}}]},
-    {title:'VIII. Formación académica', blocks:[
+      {id:'famPep', l:'¿Usted tiene algún familiar (hasta el 4º grado de consanguinidad o 2º de afinidad) que desempeña o ha desempeñado en los últimos 3 años ' + CARGOS + '?', t:'radio', o:SN, s:6, r:1},
+    ]}, {table:{id:'famPeps', cols:['Apellidos y nombres','Parentesco','Cargo','Fecha de nombramiento','¿En funciones? (Sí/No)','Fecha de culminación (si no está en funciones)'], types:['text','text','text','date','text','date'], rows:2, req:1, dep:{f:'famPep', v:'Sí'}}},
+      {fields:[{id:'colPep', l:'¿Usted ha trabajado, colaborado o es socio de alguna persona que desempeña o ha desempeñado ' + CARGOS + '?', t:'radio', o:SN, s:6, r:1}]},
+      {table:{id:'colPeps', cols:['Apellidos y nombres','Cargo de la persona con la que colaboró','Cargo que usted ejerce o ejerció con la persona','Desde','Hasta'], types:['text','text','text','date','date'], rows:2, req:1, dep:{f:'colPep', v:'Sí'}}}]},
+    {title:'Formación académica', blocks:[
       {table:{id:'instruccion', title:'Instrucción formal', cols:['Año','Ciudad – país','Instituto / universidad','Título obtenido'], rows:2, req:1}},
       {table:{id:'capacitaciones', title:'Capacitaciones', cols:['Año','Tema','Instituto / universidad'], rows:2}},
       {sub:'Competencias'},
       {fields:[{id:'idiomas', l:'Idiomas', t:'text', s:2}, {id:'nivelIdioma', l:'Nivel', t:'text', s:1}, {id:'aptitudes', l:'Aptitudes y conocimientos', t:'text', s:3}]},
     ]},
-    {title:'IX. Experiencia laboral (últimos 2 años previos a la contratación – Art. 21.9)', note:'Si no tuvo experiencia laboral, escriba N/A en la primera celda.', blocks:[
-      {table:{id:'laboral', cols:['Empresa o persona natural con la que trabajó o prestó servicios','Cargo','Fecha de inicio (dd/mm/aaaa)','Fecha de terminación (dd/mm/aaaa)'], rows:3, req:1}}]},
-    {title:'X. Información económica (USD)', blocks:[
+    {title:'Experiencia laboral (últimos 2 años previos a la contratación – Art. 21.9)', note:'Si no tuvo experiencia laboral, escriba N/A en la primera celda.', blocks:[
+      {table:{id:'laboral', cols:['Empresa o persona natural con la que trabajó o prestó servicios','Cargo','Fecha de inicio','Fecha de terminación'], types:['text','text','date','date'], rows:3, req:1}}]},
+    {title:'Información económica (USD)', blocks:[
       {sub:'Ingresos mensuales'},
       {fields:[{id:'ingRem', l:'Remuneración por relación de dependencia', t:'number', s:2}, {id:'ingCony', l:'Ingresos cónyuge', t:'number', s:2}, {id:'ingArr', l:'Ingreso por arriendos', t:'number', s:2},
         {id:'ingNeg', l:'Utilidad de negocio propio', t:'number', s:2}, {id:'ingOtros', l:'Otros (especifique en observaciones)', t:'number', s:2}, {id:'totalIng', l:'Total ingresos', t:'number', s:2, ro:1, r:1}]},
@@ -219,10 +222,10 @@ const CFG = {
       {fields:[{id:'totalAct', l:'TOTAL ACTIVOS', t:'number', s:2, r:1}]},
       {sub:'Detalle de pasivos'},
       {table:{id:'tarjetas', title:'Tarjetas de crédito', cols:['Institución financiera','Tipo de tarjeta','Número de tarjeta','Vencimiento (mm/aaaa)','Consumo mensual','Saldo a pagar'], rows:1}},
-      {table:{id:'prestamos', title:'Préstamos', cols:['Institución financiera','Plazo','Vencimiento (dd/mm/aaaa)','Cuota mensual','Saldo a pagar'], rows:1}},
+      {table:{id:'prestamos', title:'Préstamos', cols:['Institución financiera','Plazo','Vencimiento','Cuota mensual','Saldo a pagar'], types:['text','text','date','text','text'], rows:1}},
       {fields:[{id:'totalPas', l:'TOTAL PASIVOS', t:'number', s:2, r:1}, {id:'patrimonio', l:'TOTAL PATRIMONIO (se calcula)', t:'number', s:2, ro:1}]},
     ]},
-    {title:'XI. Referencias personales', blocks:[{table:{id:'refs', cols:['Nombres y apellidos','Parentesco','Dirección','Lugar de trabajo','Teléfono fijo','Teléfono celular'], rows:2, req:1}}]},
+    {title:'Referencias personales', blocks:[{table:{id:'refs', cols:['Nombres y apellidos','Parentesco','Dirección','Lugar de trabajo','Teléfono fijo','Teléfono celular'], rows:2, req:1}}]},
   ],
   calcs: [
     {target:'totalIng', sum:['ingRem','ingCony','ingArr','ingNeg','ingOtros']},
@@ -280,7 +283,7 @@ function fieldHTML(f){
   else ctrl = `<input id="${f.id}" type="${f.t}" ${f.t==='number'?'step="0.01" min="0" inputmode="decimal"':''} ${f.ro?'readonly tabindex="-1"':''} placeholder="${esc(f.ph||'')}" ${f.def?`value="${esc(f.def)}"`:''}>`;
   return `<div ${attrs}><label for="${f.id}">${esc(f.l)}${req}</label>${ctrl}${f.hint?`<span class="hint">${esc(f.hint)}</span>`:''}</div>`;
 }
-function rowHTML(t, r){ return '<tr>' + t.cols.map((c,i)=>`<td><input type="text" id="${t.id}_${r}_${i}" aria-label="${esc(c)} fila ${r+1}"></td>`).join('') + '</tr>'; }
+function rowHTML(t, r){ return '<tr>' + t.cols.map((c,i)=>`<td><input type="${(t.types&&t.types[i])||'text'}" id="${t.id}_${r}_${i}" aria-label="${esc(c)} fila ${r+1}"></td>`).join('') + '</tr>'; }
 function tableHTML(t){
   TABLES[t.id] = t;
   let body = ''; for (let r=0;r<t.rows;r++) body += rowHTML(t, r);
@@ -290,12 +293,12 @@ function tableHTML(t){
 }
 let html = '';
 CFG.sections.forEach(s => {
-  html += `<section class="card"${s.who?` data-who="${s.who}"`:''}><h2><span class="n"></span>${esc(s.title)}</h2><div class="body">`;
+  html += `<section class="card"${s.who?` data-who="${s.who}"`:''}${depAttr(s)}><h2><span class="n"></span>${esc(s.title)}</h2><div class="body">`;
   if (s.note) html += `<div class="hint">${esc(s.note)}</div>`;
   (s.blocks || []).forEach(b => {
-    if (b.fields) { html += `<div class="grid">${b.fields.map(fieldHTML).join('')}</div>`; b.fields.forEach(f => ALLF.push(Object.assign({secWho:s.who}, f))); }
-    if (b.sub) html += `<div class="sub"${b.who?` data-who="${b.who}"`:''}>${esc(b.sub)}</div>`;
-    if (b.table) html += tableHTML(Object.assign({secWho:s.who}, b.table));
+    if (b.fields) { html += `<div class="grid">${b.fields.map(fieldHTML).join('')}</div>`; b.fields.forEach(f => ALLF.push(Object.assign({secWho:s.who, secDep:s.dep}, f))); }
+    if (b.sub) html += `<div class="sub"${b.who?` data-who="${b.who}"`:''}${depAttr(b)}>${esc(b.sub)}</div>`;
+    if (b.table) html += tableHTML(Object.assign({secWho:s.who, secDep:s.dep}, b.table));
   });
   html += `</div></section>`;
 });
@@ -312,7 +315,9 @@ function val(id){
 }
 function depOk(dep){ if (!dep) return true; return [].concat(dep).some(d => [].concat(d.v).includes(val(d.f))); }
 function whoOk(w){ return !w || w === tipo(); }
-function visible(o){ return whoOk(o.who) && whoOk(o.secWho) && depOk(o.dep); }
+function visible(o){ return whoOk(o.who) && whoOk(o.secWho) && depOk(o.dep) && depOk(o.secDep); }
+const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const fmtD = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v); return m ? `${m[3]}/${MESES[+m[2]-1]}/${m[1]}` : v; };
 function refresh(){
   document.querySelectorAll('[data-who]').forEach(el => el.hidden = el.dataset.who !== tipo());
   document.querySelectorAll('[data-dep]').forEach(el => { if (el.dataset.who && el.dataset.who !== tipo()) return; el.hidden = !depOk(JSON.parse(el.dataset.dep)); });
@@ -396,7 +401,7 @@ function buildPdf(){
   const tp = T(), t = tp.v;
   const doc = new jsPDF({unit:'pt', format:'a4'});
   const W = doc.internal.pageSize.getWidth(), M = 32, CW = W - 2*M;
-  const fecha = new Date().toLocaleDateString('es-EC', {day:'2-digit', month:'2-digit', year:'numeric'});
+  const hoy = new Date(); const fecha = `${String(hoy.getDate()).padStart(2,'0')}/${MESES[hoy.getMonth()]}/${hoy.getFullYear()}`;
   let y = 28;
   doc.addImage(LOGO, 'PNG', M, y, 30, 35);
   doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(...TEAL);
@@ -452,15 +457,15 @@ function buildPdf(){
   };
   let k = 0;
   CFG.sections.forEach(s => {
-    if (!whoOk(s.who)) return;
+    if (!whoOk(s.who) || !depOk(s.dep)) return;
     bar(`${++k}. ${s.title.toUpperCase()}`);
     (s.blocks || []).forEach(b => {
       if (b.fields) {
-        const list = b.fields.filter(f => visible(Object.assign({secWho:s.who}, f))).map(f => ({l:f.l, v:val(f.id), wide: f.t==='area' || f.t==='radio' || f.l.length > 55 || f.wide}));
+        const list = b.fields.filter(f => visible(Object.assign({secWho:s.who}, f))).map(f => ({l:f.l, v:f.t==='date' ? fmtD(val(f.id)) : val(f.id), wide: f.t==='area' || f.t==='radio' || f.l.length > 55 || f.wide}));
         if (list.length) pairs(list);
       }
-      if (b.table && visible(Object.assign({secWho:s.who}, b.table))) grid(b.table.cols, tableData(b.table.id).filter(r => r.some(Boolean)), b.table.title);
-      if (b.sub && whoOk(b.who)) { room(20); doc.setFont('helvetica','bold'); doc.setFontSize(7.6); doc.setTextColor(...TEAL); doc.text(S(b.sub), M, y + 10); y += 13; }
+      if (b.table && visible(Object.assign({secWho:s.who}, b.table))) grid(b.table.cols, tableData(b.table.id).filter(r => r.some(Boolean)).map(r => r.map(fmtD)), b.table.title);
+      if (b.sub && whoOk(b.who) && depOk(b.dep)) { room(20); doc.setFont('helvetica','bold'); doc.setFontSize(7.6); doc.setTextColor(...TEAL); doc.text(S(b.sub), M, y + 10); y += 13; }
     });
     y += 4;
   });

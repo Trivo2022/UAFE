@@ -155,7 +155,24 @@ const PEP_PROV = [
   {id:'pepIni', l:'Fecha de inicio del cargo', t:'date', s:3, rd:1, dep:{f:'esPep', v:'Sí'}}, {id:'pepFin', l:'Fecha de culminación del cargo', t:'date', s:3, dep:{f:'esPep', v:'Sí'}},
   {id:'vincPep', l:'Mi cónyuge, mis familiares hasta el 4º grado de consanguinidad o 2º de afinidad o mis colaboradores o socios cercanos desempeñan o han desempeñado un cargo público destacado.', t:'radio', o:SN, s:6, r:1},
 ];
-const PROV_SECTIONS = (soc) => [
+const PROV_SECTIONS = (soc) => {
+  const s = PROV_SECTIONS_BASE(soc);
+    const EC = ['Soltero/a','Casado/a','Divorciado/a','Viudo/a','Separado/a','Unión libre'];
+    const CAS = v => ({f:v, v:['Casado/a','Unión libre','Separado/a']});
+    const conyPN = ['conyApellidos','conyNombres','conyId','conyNac','conyLugarFecha','conyCel','conyConv','conyCorreo','conyActividad'];
+    const conyPJ = ['rlCony','rlConyId','rlConyNac'];
+    s.forEach(sec => (sec.blocks || []).forEach(b => {
+      if (b.sub && b.sub.startsWith('Datos del cónyuge')) { b.sub = 'Datos del cónyuge / conviviente'; b.dep = CAS('estadoCivil'); }
+      (b.fields || []).forEach(f => {
+        if (f.id === 'monto') f.l = 'Monto estimado mensual (USD) – Art. 23';
+        if (f.id === 'estadoCivil' || f.id === 'rlEstado') { f.t = 'select'; f.o = EC; }
+        if (conyPN.includes(f.id)) f.dep = CAS('estadoCivil');
+        if (conyPJ.includes(f.id)) f.dep = CAS('rlEstado');
+      });
+    }));
+  return s;
+};
+const PROV_SECTIONS_BASE = (soc) => [
   {title:'Datos del registro, producto o servicio, forma de pago y modalidad', blocks:[{fields:[
     {id:'relacion', l:'Relación comercial', t:'radio', o:['Inicio','Actualización'], s:3, r:1}, {id:'fecha', l:'Fecha', t:'date', s:3, r:1},
     {id:'provee', l:'Provee', t:'radio', o:['Bienes','Servicio'], s:2, r:1}, {id:'detalle', l:'Detalle', t:'text', s:4, r:1},
@@ -280,7 +297,7 @@ function fieldHTML(f){
   else ctrl = `<input id="${f.id}" type="${f.t}" ${f.t==='number'?'step="0.01" min="0" inputmode="decimal"':''} ${f.ro?'readonly tabindex="-1"':''} placeholder="${esc(f.ph||'')}" ${f.def?`value="${esc(f.def)}"`:''}>`;
   return `<div ${attrs}><label for="${f.id}">${esc(f.l)}${req}</label>${ctrl}${f.hint?`<span class="hint">${esc(f.hint)}</span>`:''}</div>`;
 }
-function rowHTML(t, r){ return '<tr>' + t.cols.map((c,i)=>`<td><input type="text" id="${t.id}_${r}_${i}" aria-label="${esc(c)} fila ${r+1}"></td>`).join('') + '</tr>'; }
+function rowHTML(t, r){ return '<tr>' + t.cols.map((c,i)=>`<td><input type="${(t.types&&t.types[i])||'text'}" id="${t.id}_${r}_${i}" aria-label="${esc(c)} fila ${r+1}"></td>`).join('') + '</tr>'; }
 function tableHTML(t){
   TABLES[t.id] = t;
   let body = ''; for (let r=0;r<t.rows;r++) body += rowHTML(t, r);
@@ -290,12 +307,12 @@ function tableHTML(t){
 }
 let html = '';
 CFG.sections.forEach(s => {
-  html += `<section class="card"${s.who?` data-who="${s.who}"`:''}><h2><span class="n"></span>${esc(s.title)}</h2><div class="body">`;
+  html += `<section class="card"${s.who?` data-who="${s.who}"`:''}${depAttr(s)}><h2><span class="n"></span>${esc(s.title)}</h2><div class="body">`;
   if (s.note) html += `<div class="hint">${esc(s.note)}</div>`;
   (s.blocks || []).forEach(b => {
-    if (b.fields) { html += `<div class="grid">${b.fields.map(fieldHTML).join('')}</div>`; b.fields.forEach(f => ALLF.push(Object.assign({secWho:s.who}, f))); }
-    if (b.sub) html += `<div class="sub"${b.who?` data-who="${b.who}"`:''}>${esc(b.sub)}</div>`;
-    if (b.table) html += tableHTML(Object.assign({secWho:s.who}, b.table));
+    if (b.fields) { html += `<div class="grid">${b.fields.map(fieldHTML).join('')}</div>`; b.fields.forEach(f => ALLF.push(Object.assign({secWho:s.who, secDep:s.dep}, f))); }
+    if (b.sub) html += `<div class="sub"${b.who?` data-who="${b.who}"`:''}${depAttr(b)}>${esc(b.sub)}</div>`;
+    if (b.table) html += tableHTML(Object.assign({secWho:s.who, secDep:s.dep}, b.table));
   });
   html += `</div></section>`;
 });
@@ -312,7 +329,9 @@ function val(id){
 }
 function depOk(dep){ if (!dep) return true; return [].concat(dep).some(d => [].concat(d.v).includes(val(d.f))); }
 function whoOk(w){ return !w || w === tipo(); }
-function visible(o){ return whoOk(o.who) && whoOk(o.secWho) && depOk(o.dep); }
+function visible(o){ return whoOk(o.who) && whoOk(o.secWho) && depOk(o.dep) && depOk(o.secDep); }
+const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const fmtD = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v); return m ? `${m[3]}/${MESES[+m[2]-1]}/${m[1]}` : v; };
 function refresh(){
   document.querySelectorAll('[data-who]').forEach(el => el.hidden = el.dataset.who !== tipo());
   document.querySelectorAll('[data-dep]').forEach(el => { if (el.dataset.who && el.dataset.who !== tipo()) return; el.hidden = !depOk(JSON.parse(el.dataset.dep)); });
@@ -396,7 +415,7 @@ function buildPdf(){
   const tp = T(), t = tp.v;
   const doc = new jsPDF({unit:'pt', format:'a4'});
   const W = doc.internal.pageSize.getWidth(), M = 32, CW = W - 2*M;
-  const fecha = new Date().toLocaleDateString('es-EC', {day:'2-digit', month:'2-digit', year:'numeric'});
+  const hoy = new Date(); const fecha = `${String(hoy.getDate()).padStart(2,'0')}/${MESES[hoy.getMonth()]}/${hoy.getFullYear()}`;
   let y = 28;
   doc.addImage(LOGO, 'PNG', M, y, 30, 35);
   doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(...TEAL);
@@ -452,15 +471,15 @@ function buildPdf(){
   };
   let k = 0;
   CFG.sections.forEach(s => {
-    if (!whoOk(s.who)) return;
+    if (!whoOk(s.who) || !depOk(s.dep)) return;
     bar(`${++k}. ${s.title.toUpperCase()}`);
     (s.blocks || []).forEach(b => {
       if (b.fields) {
-        const list = b.fields.filter(f => visible(Object.assign({secWho:s.who}, f))).map(f => ({l:f.l, v:val(f.id), wide: f.t==='area' || f.t==='radio' || f.l.length > 55 || f.wide}));
+        const list = b.fields.filter(f => visible(Object.assign({secWho:s.who}, f))).map(f => ({l:f.l, v:f.t==='date' ? fmtD(val(f.id)) : val(f.id), wide: f.t==='area' || f.t==='radio' || f.l.length > 55 || f.wide}));
         if (list.length) pairs(list);
       }
-      if (b.table && visible(Object.assign({secWho:s.who}, b.table))) grid(b.table.cols, tableData(b.table.id).filter(r => r.some(Boolean)), b.table.title);
-      if (b.sub && whoOk(b.who)) { room(20); doc.setFont('helvetica','bold'); doc.setFontSize(7.6); doc.setTextColor(...TEAL); doc.text(S(b.sub), M, y + 10); y += 13; }
+      if (b.table && visible(Object.assign({secWho:s.who}, b.table))) grid(b.table.cols, tableData(b.table.id).filter(r => r.some(Boolean)).map(r => r.map(fmtD)), b.table.title);
+      if (b.sub && whoOk(b.who) && depOk(b.dep)) { room(20); doc.setFont('helvetica','bold'); doc.setFontSize(7.6); doc.setTextColor(...TEAL); doc.text(S(b.sub), M, y + 10); y += 13; }
     });
     y += 4;
   });
