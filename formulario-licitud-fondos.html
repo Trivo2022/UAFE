@@ -143,48 +143,38 @@ const DD_REFORZADA = [
 ];
 
 const CFG = {
-  key: 'netbroker_licitud_v2',
+  key: 'netbroker_licitud_v2b',
   h1: 'Declaración de Licitud de Fondos y Registro de Pagos',
   subtitle: 'NETBROKER S.A. · F-03 · Versión 2 · Resolución Nro. UAFE-DG-2026-0017',
   intro: INTRO + ' Este formulario se entrega junto con el formulario Conozca a su Cliente y registra cada pago de la operación.',
   fileBase: 'Licitud de Fondos y Pagos',
   tipos: [{v:'U', label:'Única', code:'F-03', title:'DECLARACIÓN DE LICITUD DE FONDOS Y REGISTRO DE PAGOS'}],
   sections: [
-    {title:'Datos del cliente y de la operación', blocks:[{fields:[
-      {id:'cliente', l:'Cliente (nombre o razón social)', t:'text', s:4, r:1}, {id:'ciRuc', l:'C.I. / RUC', t:'text', s:2, r:1},
-      {id:'proyecto', l:'Proyecto', t:'text', s:3, r:1}, {id:'unidad', l:'Unidad / inmueble', t:'text', s:3, r:1},
-      {id:'promotor', l:'Promotor / constructor', t:'text', s:3, r:1}, {id:'asesor', l:'Asesor comercial', t:'text', s:3, r:1},
-      {id:'valorTotal', l:'Valor total de la operación (USD)', t:'number', s:2, r:1},
-      {id:'naturaleza', l:'Naturaleza', t:'radio', o:['Reserva','Promesa','Compraventa','Arriendo'], s:4, r:1},
+    {title:'Datos del cliente', blocks:[{fields:[
+      {id:'fecha', l:'Fecha', t:'date', s:2, r:1}, {id:'ciRuc', l:'Cédula o RUC', t:'text', s:2, r:1}, {id:'cliente', l:'Cliente', t:'text', s:2, r:1},
+      {id:'unidad', l:'Departamento o local Nº', t:'text', s:2, r:1}, {id:'vendedor', l:'Vendedor', t:'text', s:2, r:1}, {id:'telefonos', l:'Teléfonos domicilio', t:'tel', s:2, r:1},
+      {id:'direccion', l:'Dirección domicilio', t:'text', s:6, r:1},
     ]}]},
-    {title:'Origen de los fondos', blocks:[{fields:[
+    {title:'Origen de los fondos (Art. 9.2)', blocks:[{fields:[
       {id:'origen', l:'Origen', t:'radio', o:['Ahorros','Sueldo','Utilidades del negocio','Venta de otro bien','Herencia / donación','Crédito','Otro'], s:6, r:1},
-      {id:'origenDesc', l:'Descripción detallada del origen', t:'area', s:6, r:1},
-      {id:'paisFondos', l:'País de origen de los fondos', t:'text', s:3, r:1}, {id:'soportes', l:'Documentos de soporte que entrega', t:'text', s:3, r:1, ph:'Ej.: estado de cuenta, contrato de crédito'},
+      {id:'origenDesc', l:'Descripción del origen', t:'area', s:4, r:1}, {id:'paisFondos', l:'País de origen de los fondos', t:'text', s:2, r:1},
     ]}]},
-    {title:'Registro de pagos', note:'Registre cada pago: reserva, cuota, anticipo, precancelación o pago de un tercero. Forma de pago: transferencia, cheque, crédito, tarjeta, efectivo, bienes o transferencia del exterior.', blocks:[
-      {table:{id:'pagos', title:'Pagos', cols:['Fecha (dd/mm/aaaa)','Valor USD','Forma de pago','Banco de origen','Nº cuenta de origen','Titular / pagador','C.I. / RUC del pagador','Relación con el cliente','Motivo'], rows:4, req:1}},
-      {fields:[{id:'totalPagos', l:'Total registrado (USD)', t:'number', s:2, ro:1}]},
-      {fields:[{id:'tercero', l:'¿Algún pago lo realiza una persona distinta del cliente?', t:'radio', o:SN, s:6, r:1},
-        {id:'pagNombre', l:'Nombre del pagador', t:'text', s:3, rd:1, dep:{f:'tercero', v:'Sí'}}, {id:'pagId', l:'C.I. / RUC del pagador', t:'text', s:3, rd:1, dep:{f:'tercero', v:'Sí'}}]},
+    {title:'Detalle de valores', note:'Registre cada pago. Forma de pago: transferencia, cheque, crédito, tarjeta, efectivo, bienes o transferencia del exterior.', blocks:[
+      {table:{id:'pagos', cols:['Fecha (dd/mm/aaaa)','Valor USD','Forma de pago','Banco','Cuenta','Nº','Nombre de quien paga','C.I. / RUC de quien paga','Parentesco con el cliente'], rows:4, req:1}},
+      {fields:[{id:'totalPagos', l:'Total (USD)', t:'number', s:2, ro:1}, {id:'observaciones', l:'Observaciones', t:'area', s:4}]},
     ]},
   ],
   tableTotals: [{table:'pagos', col:1, target:'totalPagos'}],
-  decl: [{id:'d1', t:ORIGEN},
-         {id:'d2', opt:1, t:'DECLARACIÓN DEL PAGADOR (cuando sea distinto del cliente): Declaro que realizo los pagos detallados por cuenta y a favor del cliente indicado, que los fondos son de origen lícito y que he llenado el formulario Conozca a su Cliente.'},
-         {id:'d3', t:DATOS}],
-  docs: {U:['Formulario Conozca a su Cliente (F-01 o F-02) del cliente','Formulario Conozca a su Cliente del pagador, si es distinto del cliente','Comprobantes de cada pago registrado','Soporte del origen de los fondos (estado de cuenta, contrato de crédito, escritura de venta u otro)']},
-  signers: (t, val, fecha) => [
-    ['Firma del cliente', 'Nombre: ' + val('cliente'), 'C.I.: ' + val('ciRuc')],
-    ['Firma del pagador (si es distinto)', 'Nombre: ' + (val('tercero') === 'Sí' ? val('pagNombre') : ''), 'C.I.: ' + (val('tercero') === 'Sí' ? val('pagId') : '')],
-    ['Firma de quien recibe la información', 'Nombre:', 'Fecha:']],
+  decl: [{id:'d1', t:ORIGEN}],
+  docs: {U:['Formulario Conozca a su Cliente del cliente (F-01 o F-02)','Formulario Conozca a su Cliente de la persona que paga, si es distinta del cliente','Comprobantes de cada pago registrado']},
+  signers: (t, val, fecha) => [['Firma del cliente', 'Nombre: ' + val('cliente'), 'C.I.: ' + val('ciRuc')], ['Firma de quien recibe la información', 'Nombre:', 'Fecha:']],
   internal: t => ({
     title: 'USO INTERNO – OFICIAL DE CUMPLIMIENTO',
-    pre: [['¿Los pagos son coherentes con el perfil económico y transaccional del cliente?', ck('Sí') + '   ' + ck('No – analizar como operación inusual')],
-          ['¿Pagos de terceros? ¿Se recibió el F-01 del pagador?', ck('No hay terceros') + '   ' + ck('Sí, recibido') + '   ' + ck('Sí, pendiente')],
-          ['Acumulado del cliente en los últimos 30 días (USD)', '______________      ¿USD 10.000 o más? Incluir en RESU:  ' + ck('Sí') + '  ' + ck('No')],
+    pre: [['¿Los pagos son coherentes con el perfil económico y transaccional del cliente? (Art. 9.2)', ck('Sí') + '   ' + ck('No – analizar como operación inusual')],
+          ['¿Pagos de otra persona? ¿Se recibió su formulario Conozca a su Cliente?', ck('No hay terceros') + '   ' + ck('Sí, recibido') + '   ' + ck('Sí, pendiente')],
+          ['Acumulado del cliente en los últimos 30 días (USD) – Art. 27.2', '______________      ¿USD 10.000 o más? Incluir en RESU:  ' + ck('Sí') + '  ' + ck('No')],
           ['¿Pago en efectivo, del exterior, fraccionado o precancelación sin justificar?', ck('No') + '   ' + ck('Sí – señal de alerta')]],
-    lists: LISTAS, listsTitle: 'Consulta de listas del pagador (si es distinto del cliente)',
+    lists: LISTAS, listsTitle: 'Consulta de listas de quien paga (si es distinto del cliente)',
     pairs: [['Conclusión del análisis', '\n\n']],
     signs: [['Oficial de Cumplimiento', 'Fecha:']],
   }),

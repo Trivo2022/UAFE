@@ -142,98 +142,112 @@ const DD_REFORZADA = [
   '20.7 Monitoreo intensificado definido (frecuencia y controles)',
 ];
 
+// Campos del formulario anterior + solo lo nuevo que exige la Res. UAFE-DG-2026-0017 (Arts. 19.3, 23 y 24)
+const DIR_PROV = (pre) => [
+  {id:pre+'provincia', l:'Provincia', t:'text', s:2, r:1}, {id:pre+'ciudad', l:'Ciudad', t:'text', s:2, r:1}, {id:pre+'canton', l:'Cantón', t:'text', s:2, r:1},
+  {id:pre+'parroquia', l:'Parroquia', t:'text', s:2, r:1}, {id:pre+'sector', l:'Sector', t:'text', s:2, r:1}, {id:pre+'callePrincipal', l:'Calle principal', t:'text', s:2, r:1},
+  {id:pre+'numero', l:'Número', t:'text', s:2, r:1}, {id:pre+'calleSecundaria', l:'Calle secundaria', t:'text', s:2, r:1}, {id:pre+'referencia', l:'Referencia', t:'text', s:2, r:1},
+];
+const PEP_PROV = [
+  {id:'esPep', l:'Declaro bajo juramento que me encuentro ejerciendo o he ejercido un cargo o función pública destacada en el Ecuador o en el extranjero, o una función prominente en una organización internacional (persona políticamente expuesta).', t:'radio', o:SN, s:6, r:1},
+  {id:'pepCargo', l:'Cargo', t:'text', s:3, rd:1, dep:{f:'esPep', v:'Sí'}}, {id:'pepFuncion', l:'Función', t:'text', s:3, rd:1, dep:{f:'esPep', v:'Sí'}},
+  {id:'pepJerarquia', l:'Jerarquía', t:'text', s:3, dep:{f:'esPep', v:'Sí'}}, {id:'pepEntidad', l:'Nombre de la entidad', t:'text', s:3, rd:1, dep:{f:'esPep', v:'Sí'}},
+  {id:'pepIni', l:'Fecha de inicio del cargo', t:'date', s:3, rd:1, dep:{f:'esPep', v:'Sí'}}, {id:'pepFin', l:'Fecha de culminación del cargo', t:'date', s:3, dep:{f:'esPep', v:'Sí'}},
+  {id:'vincPep', l:'Mi cónyuge, mis familiares hasta el 4º grado de consanguinidad o 2º de afinidad o mis colaboradores o socios cercanos desempeñan o han desempeñado un cargo público destacado.', t:'radio', o:SN, s:6, r:1},
+];
+const PROV_SECTIONS = (soc) => [
+  {title:'Datos del registro, producto o servicio, forma de pago y modalidad', blocks:[{fields:[
+    {id:'relacion', l:'Relación comercial', t:'radio', o:['Inicio','Actualización'], s:3, r:1}, {id:'fecha', l:'Fecha', t:'date', s:3, r:1},
+    {id:'provee', l:'Provee', t:'radio', o:['Bienes','Servicio'], s:2, r:1}, {id:'detalle', l:'Detalle', t:'text', s:4, r:1},
+    {id:'formaPago', l:'Forma de pago', t:'radio', o:['Cheque','Transferencia','Otros'], s:3, r:1}, {id:'formaPagoOtro', l:'Especifique', t:'text', s:3, rd:1, dep:{f:'formaPago', v:'Otros'}},
+    {id:'modalidad', l:'Modalidad', t:'radio', o:['Por contrato','Proveedor permanente','Proveedor eventual'], s:6, r:1},
+    {id:'monto', l:'Monto estimado (USD) – Art. 23', t:'number', s:3, r:1}, {id:'frecuencia', l:'Frecuencia de la prestación – Art. 23', t:'text', s:3, r:1, ph:'Ej.: mensual, por evento'},
+  ]}]},
+  // -------- PN
+  {who:'PN', title:'Datos del proveedor persona natural', blocks:[{fields:[
+    {id:'apellidos', l:'Apellidos', t:'text', r:1}, {id:'nombres', l:'Nombres', t:'text', r:1},
+    {id:'numId', l:'Cédula de identidad o pasaporte', t:'text', s:2, r:1}, {id:'ruc', l:'RUC (Art. 23.1.4)', t:'text', s:2, r:1}, {id:'nacionalidad', l:'Nacionalidad', t:'text', s:2, r:1},
+    {id:'lugarFechaNac', l:'Lugar y fecha de nacimiento', t:'text', s:2, r:1}, {id:'sexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1}, {id:'estadoCivil', l:'Estado civil', t:'text', s:2, r:1},
+    {id:'telConv', l:'Teléfono convencional', t:'tel', s:2, r:1}, {id:'celular', l:'Teléfono celular', t:'tel', s:2, r:1}, {id:'correo', l:'Correo electrónico', t:'email', s:2, r:1},
+    {id:'proposito', l:'Propósito de la relación comercial', t:'text', s:3, r:1}, {id:'web', l:'Página web (Art. 23.1.3)', t:'text', s:3},
+  ]}, {sub:'Dirección domiciliaria (Art. 23.1.2)'}, {fields:DIR_PROV('')},
+    {sub:'Información general de la actividad (datos del RUC)'}, {fields:[
+    {id:'actividad', l:'Actividad económica (RUC)', t:'text', s:6, r:1},
+    {id:'actCel', l:'Teléfono celular', t:'tel', s:2}, {id:'actConv', l:'Teléfono convencional', t:'tel', s:2}, {id:'actCorreo', l:'Correo electrónico', t:'email', s:2},
+    {id:'actDir', l:'Dirección (avenida o calle, número y transversal)', t:'text', s:3}, {id:'actSector', l:'Sector', t:'text', s:3},
+    {id:'actEdificio', l:'Edificio y piso', t:'text', s:3}, {id:'actDepto', l:'Nº de departamento o casa', t:'text', s:3},
+    {id:'productos', l:'Productos y servicios que ofrece en el mercado (Art. 23.1.6)', t:'area', s:4, r:1}, {id:'aniosExp', l:'Años de experiencia en el mercado (Art. 23.1.7)', t:'number', s:2, r:1},
+  ]}, {sub:'Datos del cónyuge / conviviente (si aplica)'}, {fields:[
+    {id:'conyApellidos', l:'Apellidos', t:'text'}, {id:'conyNombres', l:'Nombres', t:'text'},
+    {id:'conyId', l:'Cédula de identidad', t:'text', s:2}, {id:'conyNac', l:'Nacionalidad', t:'text', s:2}, {id:'conyLugarFecha', l:'Lugar y fecha de nacimiento', t:'text', s:2},
+    {id:'conyCel', l:'Teléfono celular', t:'tel', s:2}, {id:'conyConv', l:'Teléfono convencional', t:'tel', s:2}, {id:'conyCorreo', l:'Correo electrónico', t:'email', s:2},
+    {id:'conyActividad', l:'Actividades que desempeña (Art. 23.1.9)', t:'text', s:6},
+  ]}]},
+  // -------- PJ
+  {who:'PJ', title:'Datos del proveedor persona jurídica', blocks:[{fields:[
+    {id:'razonSocial', l:'Razón social', t:'text', s:4, r:1}, {id:'rucPj', l:'RUC', t:'text', s:2, r:1},
+    {id:'actividadPj', l:'Actividad económica (RUC)', t:'text', s:6, r:1},
+    {id:'telPj', l:'Teléfonos fijo / celular', t:'tel', s:2, r:1}, {id:'aniosPj', l:'Años de antigüedad', t:'number', s:2, r:1}, {id:'correoPj', l:'Correo electrónico', t:'email', s:2, r:1},
+    {id:'webPj', l:'Página web (Art. 23.2.4)', t:'text', s:6},
+  ]}, {sub:'Dirección de la empresa (Art. 23)'}, {fields:DIR_PROV('pj').concat([
+    {id:'pjEdificio', l:'Edificio y piso', t:'text', s:3}, {id:'pjDepto', l:'Nº de departamento u oficina', t:'text', s:3},
+    {id:'productosPj', l:'Productos y servicios que ofrece en el mercado (Art. 23.2.6)', t:'area', s:6, r:1},
+  ])}, {sub:'Datos del representante legal'}, {fields:[
+    {id:'rlApellidos', l:'Apellidos', t:'text', r:1}, {id:'rlNombres', l:'Nombres', t:'text', r:1},
+    {id:'rlId', l:'Cédula de identidad o pasaporte', t:'text', s:2, r:1}, {id:'rlDir', l:'Dirección del domicilio', t:'text', s:4, r:1},
+    {id:'rlLugarFecha', l:'Lugar y fecha de nacimiento', t:'text', s:2, r:1}, {id:'rlNac', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'rlCorreo', l:'Correo electrónico', t:'email', s:2, r:1},
+    {id:'rlCel', l:'Teléfono celular', t:'tel', s:2, r:1}, {id:'rlFijo', l:'Teléfono fijo (Art. 23.2.2)', t:'tel', s:2, r:1}, {id:'rlSexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1},
+    {id:'rlEstado', l:'Estado civil', t:'text', s:2, r:1}, {id:'rlCony', l:'Nombres y apellidos del cónyuge', t:'text', s:4},
+    {id:'rlConyId', l:'Cédula o pasaporte del cónyuge', t:'text', s:3}, {id:'rlConyNac', l:'Nacionalidad del cónyuge', t:'text', s:3},
+  ]}, {table:{id:'acc', title:'Socios o accionistas (Art. 19.3)', cols:['Socio / accionista','C.I. / RUC','Nacionalidad','% participación','¿PEP? (Sí/No)'], rows:3, req:1}},
+    {fields:[{id:'benefFinal', l:'Beneficiario(s) final(es): persona(s) natural(es) con control (Art. 19.3)', t:'area', s:6, r:1}]}]},
+  {title:'Información financiera (USD)', blocks:[{fields:[
+    {id:'activos', l:'Total activos', t:'number', s:2, r:1}, {id:'pasivos', l:'Total pasivos', t:'number', s:2, r:1}, {id:'patrimonio', l:'Patrimonio neto (se calcula)', t:'number', s:2, ro:1},
+    {id:'ingresos', l:'Ingreso mensual por la actividad', t:'number', s:3, r:1}, {id:'gastos', l:'Gasto mensual', t:'number', s:3, r:1},
+  ]}]},
+  {title:'Referencias comerciales', blocks:[{table:{id:'refs', cols:['Nombre de la institución','Persona de contacto','Teléfono','Antigüedad de la relación comercial'], rows:2, req:1}}]},
+  {title:'Declaración de Persona Expuesta Políticamente (PEP)', blocks:[{fields:PEP_PROV},
+    {table:{id:'peps', title:'Datos del familiar o colaborador', cols:['Nombres y apellidos','Cédula o pasaporte','Cargo / función','Período','Parentesco'], rows:2, req:1, dep:{f:'vincPep', v:'Sí'}}},
+    {fields:[{id:'socioPep', l:`¿El ${soc} o alguno de sus socios es socio de una persona expuesta políticamente? (Art. 23.1.10)`, t:'radio', o:SN, s:6, r:1}]}]},
+];
+const DOCS_PROV = {
+  PN:['Copia de la cédula de identidad y papeleta de votación','Copia de cédula de su cónyuge o conviviente (si aplica)','Copia del RUC y de la declaración del impuesto a la renta del año inmediato anterior','Copia de los recibos de cualquiera de los servicios básicos'],
+  PJ:['Copia del RUC y de la declaración del impuesto a la renta del año inmediato anterior','Copia de los recibos de cualquiera de los servicios básicos','Copia de la cédula de identidad y papeleta de votación del representante legal','Copia actualizada del certificado de cumplimiento de obligaciones','Copia del nombramiento del representante legal','Nómina actualizada de accionistas (organismo de control competente)','Copia del poder del apoderado, cuando corresponda','Referencias comerciales'],
+};
+const PROV_INTERNAL = t => ({
+  title: 'USO INTERNO – OFICIAL DE CUMPLIMIENTO',
+  lists: LISTAS, listsTitle: 'Consulta de listas obligatorias (Art. 24.1)',
+  pairs: [['Perfil de riesgo (matriz individual)', ck('Bajo') + '   ' + ck('Medio') + '   ' + ck('Alto') + '      Puntaje: ______'],
+          ['Cláusula de prevención y reserva en el contrato (Art. 24.3)', ck('Sí') + '   ' + ck('No') + '   ' + ck('No aplica')],
+          ['Actualización anual (Art. 24.2)', ck('Se actualizó') + '   ' + ck('No hubo cambios (constancia)') + '      Próxima actualización: ____________'],
+          ['Señales de alerta / observaciones', '\n\n']],
+  signs: [['Oficial de Cumplimiento', 'Fecha:']],
+});
+const PROV_SIGNERS = (lab) => (t, val, fecha) => [
+  [t === 'PN' ? 'Firma del ' + lab : 'Firma del representante legal',
+   'Nombre: ' + (t === 'PN' ? (val('nombres') + ' ' + val('apellidos')) : (val('rlNombres') + ' ' + val('rlApellidos'))).trim(), 'C.I.: ' + (t === 'PN' ? val('numId') : val('rlId')), 'Fecha: ' + fecha],
+  ['Firma del empleado que recepta la información', 'Nombre:', 'Fecha:']];
+const PROV_DECL = [
+  {id:'d1', t:ORIGEN.replace('con los que realizo esta operación', 'que recibo en esta relación comercial')},
+  {id:'d2', t:DATOS_SIN_PROMOTOR},
+];
+
 const CFG = {
-  key: 'netbroker_kyp_v2',
+  key: 'netbroker_kyp_v2b',
   h1: 'Formulario Conozca a su Proveedor',
   subtitle: 'NETBROKER S.A. · F-04 / F-05 · Versión 2 · Resolución Nro. UAFE-DG-2026-0017',
-  intro: INTRO.replace('debida diligencia', 'debida diligencia a sus proveedores, comisionistas y referidores'),
+  intro: INTRO.replace('debida diligencia', 'debida diligencia respecto de sus proveedores'),
   fileBase: 'Conozca a su Proveedor',
   tipos: [
-    {v:'PN', label:'Persona natural (F-04)', code:'F-04', title:'FORMULARIO CONOZCA A SU PROVEEDOR – PERSONA NATURAL'},
-    {v:'PJ', label:'Persona jurídica (F-05)', code:'F-05', title:'FORMULARIO CONOZCA A SU PROVEEDOR – PERSONA JURÍDICA'},
+    {v:'PN', label:'Persona natural (F-04)', code:'F-04', title:'FORMULARIO "CONOZCA A SU PROVEEDOR" – PERSONA NATURAL'},
+    {v:'PJ', label:'Persona jurídica (F-05)', code:'F-05', title:'FORMULARIO "CONOZCA A SU PROVEEDOR" – PERSONA JURÍDICA'},
   ],
-  sections: [
-    {title:'Datos del registro', blocks:[{fields:[
-      {id:'tipoRegistro', l:'Tipo de registro', t:'radio', o:['Inicio','Actualización anual','Actualización por cambios'], s:6, r:1},
-      {id:'tipoProveedor', l:'Tipo de proveedor', t:'radio', o:['Bienes','Servicios','Servicios profesionales','Comisionista / referidor','Aliado comercial'], s:6, r:1},
-      {id:'provee', l:'Bienes o servicios que provee a NETBROKER S.A.', t:'area', s:6, r:1, ph:'Ej.: referidos de compradores para proyectos en Quito'},
-      {id:'modalidad', l:'Modalidad', t:'select', o:['Por contrato','Proveedor permanente','Proveedor eventual'], s:2, r:1},
-      {id:'montoAnual', l:'Monto anual estimado (USD)', t:'number', s:2, r:1},
-      {id:'frecuencia', l:'Frecuencia de la prestación', t:'select', o:['Única','Mensual','Trimestral','Anual','Por evento'], s:2, r:1},
-      {id:'formaPago', l:'Forma de pago', t:'select', o:['Transferencia','Cheque','Otro'], s:2, r:1},
-      {id:'banco', l:'Banco', t:'text', s:2, r:1}, {id:'tipoCuenta', l:'Tipo de cuenta', t:'select', o:['Ahorros','Corriente'], s:2, r:1},
-      {id:'numCuenta', l:'Número de cuenta', t:'text', s:3, r:1},
-      {id:'titularCuenta', l:'Titular de la cuenta', t:'text', s:3, r:1, hint:'Debe ser el mismo proveedor. No se pagan cuentas de terceros.'},
-    ]}]},
-    {who:'PN', title:'Datos personales', blocks:[{fields:[
-      {id:'apellidos', l:'Apellidos', t:'text', r:1}, {id:'nombres', l:'Nombres', t:'text', r:1},
-      {id:'tipoId', l:'Tipo de identificación', t:'select', o:['Cédula','Pasaporte'], s:2, r:1}, {id:'numId', l:'Número de identificación', t:'text', s:2, r:1}, {id:'ruc', l:'RUC', t:'text', s:2, r:1},
-      {id:'nacionalidad', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'lugarNac', l:'Lugar de nacimiento', t:'text', s:2, r:1}, {id:'fechaNac', l:'Fecha de nacimiento', t:'date', s:2, r:1},
-      {id:'estadoCivil', l:'Estado civil', t:'select', o:['Soltero/a','Casado/a','Unión de hecho','Divorciado/a','Viudo/a'], s:3, r:1},
-      {id:'sexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:3, r:1},
-      {id:'telFijo', l:'Teléfono fijo', t:'tel', s:2}, {id:'celular', l:'Celular', t:'tel', s:2, r:1}, {id:'correo', l:'Correo electrónico', t:'email', s:2, r:1},
-      {id:'web', l:'Página web o red social comercial', t:'text', s:6},
-    ]}]},
-    {who:'PJ', title:'Datos de la empresa', blocks:[{fields:[
-      {id:'razonSocial', l:'Razón social', t:'text', s:4, r:1}, {id:'rucPj', l:'RUC', t:'text', s:2, r:1},
-      {id:'fechaConst', l:'Fecha de constitución', t:'date', s:2, r:1}, {id:'nacionalidadPj', l:'Nacionalidad', t:'text', s:2, r:1},
-      {id:'aniosExpPj', l:'Años de experiencia en el mercado', t:'number', s:2, r:1},
-      {id:'telEmpresa', l:'Teléfono de la empresa', t:'tel', s:2, r:1}, {id:'correoPj', l:'Correo electrónico', t:'email', s:2, r:1}, {id:'webPj', l:'Página web', t:'text', s:2},
-    ]}]},
-    {title:'Dirección', blocks:[{fields:DIRECCION}]},
-    {title:'Actividad económica', blocks:[{fields:[
-      {id:'actividad', l:'Actividad económica (según el RUC)', t:'text', s:6, r:1},
-      {id:'productos', l:'Productos y servicios que ofrece en el mercado', t:'area', s:6, r:1},
-      {id:'aniosExp', who:'PN', l:'Años de experiencia en el mercado', t:'number', s:3, r:1},
-      {id:'proposito', who:'PN', l:'Propósito de la relación comercial', t:'text', s:3, r:1},
-    ]}]},
-    {who:'PN', title:'Cónyuge o conviviente', blocks:[{fields:[
-      {id:'tieneCony', l:'¿Tiene cónyuge o conviviente?', t:'radio', o:SN, s:6, r:1},
-      {id:'conyNombre', l:'Apellidos y nombres', t:'text', s:4, rd:1, dep:{f:'tieneCony', v:'Sí'}}, {id:'conyId', l:'Identificación', t:'text', s:2, rd:1, dep:{f:'tieneCony', v:'Sí'}},
-      {id:'conyNac', l:'Nacionalidad', t:'text', s:2, dep:{f:'tieneCony', v:'Sí'}}, {id:'conyCel', l:'Celular', t:'tel', s:2, dep:{f:'tieneCony', v:'Sí'}}, {id:'conyCorreo', l:'Correo', t:'email', s:2, dep:{f:'tieneCony', v:'Sí'}},
-      {id:'conyActividad', l:'Actividades que desempeña', t:'text', s:3, rd:1, dep:{f:'tieneCony', v:'Sí'}}, {id:'conyEmpleador', l:'Empleador o negocio', t:'text', s:3, dep:{f:'tieneCony', v:'Sí'}},
-    ]}]},
-    {who:'PJ', title:'Representante legal o apoderado', blocks:[{fields:[
-      {id:'rlNombre', l:'Apellidos y nombres', t:'text', s:4, r:1}, {id:'rlId', l:'Cédula / pasaporte', t:'text', s:2, r:1},
-      {id:'rlNac', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'rlFijo', l:'Teléfono fijo', t:'tel', s:2, r:1}, {id:'rlCel', l:'Celular', t:'tel', s:2, r:1},
-      {id:'rlDir', l:'Dirección domiciliaria', t:'text', s:4, r:1}, {id:'rlCorreo', l:'Correo', t:'email', s:2, r:1},
-    ]}, {table:{id:'acc', title:'Socios o accionistas (hasta llegar a personas naturales)', cols:['Socio / accionista','C.I. / RUC','Nacionalidad','% participación','¿PEP? (Sí/No)'], rows:3, req:1}},
-      {fields:[{id:'benefFinal', l:'Beneficiario(s) final(es): persona(s) natural(es) que poseen o controlan la empresa', t:'area', s:6, r:1}]}]},
-    {title:'Información financiera (USD)', blocks:[{fields:[
-      {id:'periodicidad', l:'Periodicidad', t:'select', o:['Mensual','Anual'], s:2, r:1},
-      {id:'ingresos', l:'Ingresos', t:'number', s:2, r:1}, {id:'egresos', l:'Egresos', t:'number', s:2, r:1},
-      {id:'activos', l:'Total activos', t:'number', s:2, r:1}, {id:'pasivos', l:'Total pasivos', t:'number', s:2, r:1},
-      {id:'patrimonio', l:'Patrimonio (se calcula)', t:'number', s:2, ro:1},
-    ]}]},
-    {title:'Referencias comerciales', blocks:[{table:{id:'refs', cols:['Empresa / persona','Persona de contacto','Teléfono','Antigüedad de la relación'], rows:2, req:1}}]},
-    {title:'Declaración de Persona Expuesta Políticamente (PEP)', blocks:[{fields:[
-      ...PEP_FIELDS().map(f => f.id === 'esPep' ? Object.assign({}, f, {l:'¿Usted, el representante legal o algún socio desempeña o ha desempeñado funciones públicas destacadas en el Ecuador o en el extranjero, o funciones prominentes en una organización internacional?'}) : f),
-      {id:'socioPep', l:'¿Algún socio del proveedor es socio de negocios de un PEP?', t:'radio', o:SN, s:6, r:1},
-    ]}, {table:PEP_TABLE()}]},
-  ],
+  sections: PROV_SECTIONS('proveedor'),
   calcs: [{target:'patrimonio', sum:['activos'], minus:['pasivos']}],
-  decl: [
-    {id:'d1', t:ORIGEN.replace('con los que realizo esta operación', 'que recibo y administro en esta relación comercial')},
-    {id:'d2', t:DATOS_SIN_PROMOTOR},
-    {id:'d3', t:'COMPROMISO: Me comprometo a actualizar esta información al menos una vez al año y a notificar cualquier cambio. Acepto la inclusión de cláusulas de prevención de lavado de activos y de reserva de la información en los contratos con NETBROKER S.A.'},
-  ],
-  docs: {
-    PN:['Copia de cédula del proveedor y del cónyuge (si aplica)','Copia del RUC','Declaración del impuesto a la renta del año anterior','Planilla de servicio básico (máximo 3 meses)','Certificado bancario de la cuenta a nombre del proveedor','Dos referencias comerciales'],
-    PJ:['Copia del RUC','Escritura de constitución y reformas','Nombramiento del representante legal o poder','Cédula del representante legal','Nómina actualizada de socios o accionistas (organismo de control)','Certificado de cumplimiento de obligaciones','Declaración del impuesto a la renta del año anterior o estados financieros','Planilla de servicio básico (máximo 3 meses)','Certificado bancario de la cuenta a nombre de la empresa','Dos referencias comerciales'],
-  },
-  signers: (t, val, fecha) => [
-    [t === 'PN' ? 'Firma del proveedor' : 'Firma del representante legal o apoderado',
-     'Nombre: ' + (t === 'PN' ? (val('nombres') + ' ' + val('apellidos')).trim() : val('rlNombre')), 'C.I.: ' + (t === 'PN' ? val('numId') : val('rlId')), 'Fecha: ' + fecha],
-    ['Firma del empleado que recibe la información', 'Nombre:', 'Fecha:']],
-  internal: t => ({
-    title: 'USO INTERNO – OFICIAL DE CUMPLIMIENTO / ADMINISTRACIÓN',
-    lists: LISTAS, listsTitle: 'Consulta de listas obligatorias (Res. UAFE-DG-2026-0017, Art. 24.1)',
-    pairs: [['Perfil de riesgo (matriz individual)', ck('Bajo') + '   ' + ck('Medio') + '   ' + ck('Alto') + '      Puntaje: ______'],
-            ['Cláusula PLA y de reserva en el contrato', ck('Sí') + '   ' + ck('No') + '   ' + ck('No aplica')],
-            ['Actualización anual', ck('Se actualizó') + '   ' + ck('No hubo cambios (constancia)') + '      Próxima actualización: ____________'],
-            ['Señales de alerta / observaciones', '\n\n']],
-    signs: [['Oficial de Cumplimiento', 'Fecha:'], ['Responsable de compras / administración', 'Fecha:']],
-  }),
+  decl: PROV_DECL,
+  docs: DOCS_PROV,
+  signers: PROV_SIGNERS('proveedor'),
+  internal: PROV_INTERNAL,
   nameFor: (t, val) => t === 'PN' ? val('apellidos') + ' ' + val('nombres') : val('razonSocial'),
 };
 
