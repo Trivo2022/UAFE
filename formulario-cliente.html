@@ -482,7 +482,7 @@ function buildPdf(){
   const room = h => { if (y + h > 805) { doc.addPage(); y = 36; } };
   const bar = title => { room(40); doc.setFillColor(...TEAL); doc.rect(M, y, CW, 14, 'F'); doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(255); doc.text(S(title), M + 5, y + 10); y += 14; };
   const L = txt => ({content:S(txt), styles:{fillColor:GREY, fontStyle:'bold'}});
-  const st = {font:'helvetica', fontSize:7.6, cellPadding:3, lineColor:[150,170,175], lineWidth:0.4, textColor:20, valign:'middle'};
+  const st = {font:'helvetica', fontSize:7.6, cellPadding:3, overflow:'linebreak', lineColor:[150,170,175], lineWidth:0.4, textColor:20, valign:'middle'};
   const pairs = list => {
     const body = []; let i = 0;
     while (i < list.length) {
