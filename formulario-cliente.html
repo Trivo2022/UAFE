@@ -223,24 +223,42 @@ const CFG = {
     ]}]},
     // ---------------- PJ
     {who:'PJ', title:'Datos generales del cliente – persona jurídica', blocks:[{fields:[
-      {id:'razonSocial', l:'Razón social', t:'text', s:4, r:1}, {id:'nacPj', l:'Nacionalidad', t:'text', s:2, r:1},
-      {id:'rucPj', l:'RUC', t:'text', s:2, r:1}, {id:'tipoEmpresa', l:'Tipo de empresa (forma jurídica)', t:'text', s:2, r:1, ph:'Ej.: S.A., Cía. Ltda., fideicomiso'},
-      {id:'lugarFechaConst', l:'Lugar y fecha de constitución', t:'text', s:2, r:1},
+      {id:'razonSocial', l:'Razón social', t:'text', s:3, r:1}, {id:'nombreComercial', l:'Nombre comercial (Ley, Art. 44)', t:'text', s:3, ph:'Si no tiene, escriba N/A'},
+      {id:'rucPj', l:'RUC', t:'text', s:2, r:1}, {id:'nacPj', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'tipoEmpresa', l:'Tipo de empresa (forma jurídica)', t:'text', s:2, r:1, ph:'Ej.: S.A., Cía. Ltda., fideicomiso'},
+      {id:'tipoCompania', l:'Tipo de compañía', t:'radio', o:['Privada','Pública','Mixta'], s:3, r:1}, {id:'lugarFechaConst', l:'Lugar y fecha de constitución', t:'text', s:3, r:1},
       {id:'sectorEcon', l:'Sector económico', t:'text', s:2, r:1}, {id:'telPj', l:'Teléfono celular / corporativo', t:'tel', s:2, r:1}, {id:'webPj', l:'Página web', t:'text', s:2},
       {id:'correoPj', l:'Correo electrónico principal', t:'email', s:3, r:1}, {id:'propositoPj', l:'Propósito de la relación comercial', t:'text', s:3, r:1},
+    ]}, {sub:'Persona de contacto'}, {fields:[
+      {id:'contactoNombre', l:'Nombres y apellidos', t:'text', s:3, r:1}, {id:'contactoCargo', l:'Cargo', t:'text', s:3},
+      {id:'contactoCorreo', l:'Correo electrónico', t:'email', s:3, r:1}, {id:'contactoTel', l:'Teléfono', t:'tel', s:3, r:1},
     ]}, {sub:'Dirección de la oficina principal'}, {fields:[
+      {id:'paisPj', l:'País', t:'text', s:2, r:1}, {id:'provinciaPj', l:'Provincia', t:'text', s:2, r:1}, {id:'ciudadPj', l:'Ciudad', t:'text', s:2, r:1},
       {id:'callePj', l:'Calle principal', t:'text', s:3, r:1}, {id:'numeroPj', l:'Número', t:'text', s:1, r:1}, {id:'transversalPj', l:'Calle transversal', t:'text', s:2, r:1},
-      {id:'sectorPj', l:'Sector', t:'text', s:2, r:1}, {id:'inmueblePj', l:'Inmueble', t:'text', s:2}, {id:'ciudadPj', l:'Ciudad', t:'text', s:2, r:1},
-      {id:'paisPj', l:'País', t:'text', s:2, r:1}, {id:'codPostalPj', l:'Código postal', t:'text', s:2},
+      {id:'sectorPj', l:'Sector', t:'text', s:2, r:1}, {id:'inmueblePj', l:'Inmueble', t:'text', s:2}, {id:'codPostalPj', l:'Código postal', t:'text', s:2},
+      {id:'referenciaPj', l:'Referencia de ubicación', t:'text', s:6, r:1},
     ]}]},
     {who:'PJ', title:'Datos del representante legal', blocks:[{fields:[
       {id:'rlApellidos', l:'Apellidos', t:'text', r:1}, {id:'rlNombres', l:'Nombres', t:'text', r:1},
       {id:'rlId', l:'Cédula / pasaporte vigente', t:'text', s:3, r:1}, {id:'rlNac', l:'Nacionalidad', t:'text', s:3, r:1},
-      {id:'rlLugarFecha', l:'Lugar y fecha de nacimiento', t:'text', s:2, r:1}, {id:'rlEstado', l:'Estado civil', t:'text', s:2, r:1}, {id:'rlSexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1},
-      {id:'rlEstudios', l:'Nivel de estudios', t:'text', s:2}, {id:'rlTel', l:'Teléfono celular / domicilio', t:'tel', s:2, r:1}, {id:'rlProposito', l:'Propósito de la relación comercial', t:'text', s:2},
-      {id:'rlCorreo', l:'Correo electrónico personal', t:'email', s:3, r:1}, {id:'rlPuesto', l:'Puesto en la empresa', t:'text', s:3, r:1},
-      {id:'rlDir', l:'Dirección del domicilio', t:'text', s:6, r:1},
-    ]}]},
+      {id:'rlLugarFecha', l:'Lugar y fecha de nacimiento', t:'text', s:2, r:1}, {id:'rlSexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1},
+      {id:'rlEstado', l:'Estado civil', t:'select', o:['Soltero/a','Casado/a','Divorciado/a','Viudo/a','Separado/a','Unión libre'], s:2, r:1},
+      {id:'rlSepBienes', l:'Separación de bienes', t:'radio', o:SN, s:6, rd:1, dep:{f:'rlEstado', v:['Casado/a','Unión libre','Separado/a']}},
+      {id:'rlEstudios', l:'Nivel de estudios', t:'text', s:2}, {id:'rlPuesto', l:'Puesto en la empresa', t:'text', s:2, r:1}, {id:'rlTel', l:'Teléfono celular / domicilio', t:'tel', s:2, r:1},
+      {id:'rlCorreo', l:'Correo electrónico personal', t:'email', s:6, r:1},
+    ]}, {sub:'Domicilio del representante legal'}, {fields:[
+      {id:'rlPais', l:'País', t:'text', s:2, r:1}, {id:'rlProvincia', l:'Provincia', t:'text', s:2, r:1}, {id:'rlCiudad', l:'Ciudad', t:'text', s:2, r:1},
+      {id:'rlCalle', l:'Calle principal', t:'text', s:3, r:1}, {id:'rlNumero', l:'Número', t:'text', s:1, r:1}, {id:'rlTransversal', l:'Calle transversal', t:'text', s:2, r:1},
+      {id:'rlSector', l:'Sector', t:'text', s:2, r:1}, {id:'rlReferencia', l:'Referencia de ubicación', t:'text', s:4, r:1},
+    ]}, {sub:'Información laboral del representante legal'}, {fields:[
+      {id:'rlTipoRel', l:'Tipo de relación laboral', t:'radio', o:['Independiente','Relación de dependencia'], s:3, r:1}, {id:'rlProfesion', l:'Profesión', t:'text', s:3, r:1},
+      {id:'rlActividad', l:'Actividad económica', t:'text', s:3, r:1}, {id:'rlEmpresa', l:'Nombre de la empresa', t:'text', s:3, r:1},
+      {id:'rlCargoLab', l:'Cargo', t:'text', s:2, r:1}, {id:'rlFechaIniAct', l:'Fecha de inicio de actividad', t:'date', s:2, r:1}, {id:'rlTelLab', l:'Teléfono / extensión', t:'tel', s:2, r:1},
+      {id:'rlLabPais', l:'País', t:'text', s:2, r:1}, {id:'rlLabProvincia', l:'Provincia', t:'text', s:2, r:1}, {id:'rlLabCiudad', l:'Ciudad', t:'text', s:2, r:1},
+      {id:'rlLabCalle', l:'Calle principal', t:'text', s:3, r:1}, {id:'rlLabNumero', l:'Número', t:'text', s:1, r:1}, {id:'rlLabTransversal', l:'Calle secundaria', t:'text', s:2, r:1},
+    ]}, {sub:'Información financiera del representante legal (USD)'}, {fields:[
+      {id:'rlIngreso', l:'Ingreso mensual', t:'number', s:2, r:1}, {id:'rlEgreso', l:'Egreso mensual', t:'number', s:2, r:1}, {id:'rlFuente', l:'Fuente de ingresos', t:'text', s:2, r:1},
+      {id:'rlActivos', l:'Total activos', t:'number', s:2, r:1}, {id:'rlPasivos', l:'Total pasivos', t:'number', s:2, r:1}, {id:'rlPatrimonio', l:'Total patrimonio (se calcula)', t:'number', s:2, ro:1},
+    ]}, {table:{id:'autorizados', title:'Personas autorizadas para actuar en nombre del cliente: firmas autorizadas o apoderados (Ley, Art. 43.b). Si no hay otras personas, escriba N/A', cols:['Nombres y apellidos','Identificación','Cargo','Documento que lo autoriza (nombramiento / poder)'], rows:2, req:1}}]},
     {who:'PJ', title:'Estructura accionaria y de control (Art. 19)', note:'Identifique a los socios hasta llegar a personas naturales. Si un socio es persona jurídica, adjunte su nómina de accionistas.', blocks:[
       {table:{id:'acc', title:'Socios o accionistas', cols:['Socio / accionista (nombre o razón social)','C.I. / RUC / pasaporte','Nacionalidad','% participación','¿Es persona jurídica?','¿PEP?'], rows:3, req:1}},
       {table:{id:'bf', title:'Beneficiarios finales (personas naturales que poseen o controlan la entidad)', cols:['Nombres y apellidos','Identificación','Nacionalidad','% / forma de control','Domicilio','¿PEP?'], rows:2, req:1}},
@@ -255,7 +273,7 @@ const CFG = {
       {id:'ingresoPj', l:'Ingreso mensual estimado (USD)', t:'number', s:2, r:1}, {id:'gastoPj', l:'Gasto mensual estimado (USD)', t:'number', s:2, r:1},
       {id:'capacidadPago', l:'Capacidad de pago mensual para compra del inmueble (USD)', t:'number', s:2, r:1},
       {id:'activosPj', l:'Total activos (USD)', t:'number', s:2, r:1}, {id:'pasivosPj', l:'Total pasivos (USD)', t:'number', s:2, r:1}, {id:'patrimonioPj', l:'Patrimonio (se calcula)', t:'number', s:2, ro:1},
-      {id:'naturalezaNeg', l:'Naturaleza del negocio (Art. 19.3)', t:'area', s:6, r:1},
+      {id:'naturalezaNeg', l:'Objeto social y naturaleza del negocio (Art. 19.3)', t:'area', s:6, r:1},
     ]}]},
     // ---------------- comunes
     {title:'Perfil transaccional (Arts. 9.2 y 15)', blocks:[{fields:PERFIL}]},
@@ -272,11 +290,11 @@ const CFG = {
       {table:{id:'pepsPj', who:'PJ', cols:['Nombre de la persona vinculada','Calidad en la entidad','Nombre del PEP','Cargo / institución del PEP','Relación'], rows:2}},
     ]},
   ],
-  calcs: [{target:'patrimonio', sum:['activos'], minus:['pasivos']}, {target:'patrimonioPj', sum:['activosPj'], minus:['pasivosPj']}],
+  calcs: [{target:'patrimonio', sum:['activos'], minus:['pasivos']}, {target:'patrimonioPj', sum:['activosPj'], minus:['pasivosPj']}, {target:'rlPatrimonio', sum:['rlActivos'], minus:['rlPasivos']}],
   decl: [{id:'d1', t:ORIGEN}, {id:'d2', t:DATOS}],
   docs: {
     PN:['Copia del documento de identificación (cédula de ciudadanía, pasaporte o RUC)','Copia de la visa o permiso de ingreso y permanencia temporal (extranjeros no residentes en el Ecuador)','Copia del documento de identificación del cónyuge','Declaración de Licitud de Fondos y Registro de Pagos (F-03)','Formulario de la otra persona que realiza los pagos (si aplica)','Soportes del origen de los fondos, cuando se aplique debida diligencia reforzada (Art. 20.3)'],
-    PJ:['Copia del Registro Único de Contribuyentes','Copia del documento de identificación de otras personas autorizadas a representar la compañía (si aplica)','Copia del documento de identificación de las personas que sean firmas autorizadas de la compañía','Copia de al menos un recibo de cualquiera de los servicios básicos','Copia del certificado de cumplimiento de obligaciones de la Superintendencia de Compañías, Valores y Seguros (si aplica)','Escritura de constitución o estatutos y nombramiento del representante legal (Art. 19)','Nómina actualizada de socios o accionistas e identificación de los beneficiarios finales (Art. 19.3)','Declaración de Licitud de Fondos y Registro de Pagos (F-03)'],
+    PJ:['Copia del Registro Único de Contribuyentes','Copia del documento de identificación de otras personas autorizadas a representar la compañía (si aplica)','Copia del documento de identificación de las personas que sean firmas autorizadas de la compañía','Copia de al menos un recibo de cualquiera de los servicios básicos','Certificado de cumplimiento de obligaciones y existencia legal (Superintendencia de Compañías), no mayor a 30 días','Escritura de constitución o estatutos y nombramiento del representante legal (Art. 19)','Nómina actualizada de socios o accionistas e identificación de los beneficiarios finales (Art. 19.3)','Estados financieros del último ejercicio o declaración del impuesto a la renta','Declaración de Licitud de Fondos y Registro de Pagos (F-03)'],
   },
   signers: (t, val, fecha) => t === 'PN'
     ? [['Firma del cliente', 'Nombre: ' + (val('nombres') + ' ' + val('apellidos')).trim(), 'C.I.: ' + val('numId'), 'Fecha: ' + fecha], ['Firma de quien recibe la información', 'Nombre:', 'Fecha:']]
