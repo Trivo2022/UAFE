@@ -160,14 +160,12 @@ const PROV_SECTIONS = (soc) => {
     const EC = ['Soltero/a','Casado/a','Divorciado/a','Viudo/a','Separado/a','Unión libre'];
     const CAS = v => ({f:v, v:['Casado/a','Unión libre','Separado/a']});
     const conyPN = ['conyApellidos','conyNombres','conyId','conyNac','conyLugarFecha','conyCel','conyConv','conyCorreo','conyActividad'];
-    const conyPJ = ['rlCony','rlConyId','rlConyNac'];
     s.forEach(sec => (sec.blocks || []).forEach(b => {
       if (b.sub && b.sub.startsWith('Datos del cónyuge')) { b.sub = 'Datos del cónyuge / conviviente'; b.dep = CAS('estadoCivil'); }
       (b.fields || []).forEach(f => {
         if (f.id === 'monto') f.l = 'Monto estimado mensual (USD) – Art. 23';
-        if (f.id === 'estadoCivil' || f.id === 'rlEstado') { f.t = 'select'; f.o = EC; }
+        if (f.id === 'estadoCivil') { f.t = 'select'; f.o = EC; }
         if (conyPN.includes(f.id)) f.dep = CAS('estadoCivil');
-        if (conyPJ.includes(f.id)) f.dep = CAS('rlEstado');
       });
     }));
   return s;
@@ -209,15 +207,18 @@ const PROV_SECTIONS_BASE = (soc) => [
   ]}, {sub:'Dirección de la empresa (Art. 23)'}, {fields:DIR_PROV('pj').concat([
     {id:'pjEdificio', l:'Edificio y piso', t:'text', s:3}, {id:'pjDepto', l:'Nº de departamento u oficina', t:'text', s:3},
     {id:'productosPj', l:'Productos y servicios que ofrece en el mercado (Art. 23.2.6)', t:'area', s:6, r:1},
-  ])}, {sub:'Datos del representante legal'}, {fields:[
+  ])}, {sub:'Datos del representante legal (Art. 23.2.2; Reglamento, Art. 30, 1.2.1)'}, {fields:[
     {id:'rlApellidos', l:'Apellidos', t:'text', r:1}, {id:'rlNombres', l:'Nombres', t:'text', r:1},
-    {id:'rlId', l:'Cédula de identidad o pasaporte', t:'text', s:2, r:1}, {id:'rlDir', l:'Dirección del domicilio', t:'text', s:4, r:1},
-    {id:'rlLugarFecha', l:'Lugar y fecha de nacimiento', t:'text', s:2, r:1}, {id:'rlNac', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'rlCorreo', l:'Correo electrónico', t:'email', s:2, r:1},
-    {id:'rlCel', l:'Teléfono celular', t:'tel', s:2, r:1}, {id:'rlFijo', l:'Teléfono fijo (Art. 23.2.2)', t:'tel', s:2, r:1}, {id:'rlSexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1},
-    {id:'rlEstado', l:'Estado civil', t:'text', s:2, r:1}, {id:'rlCony', l:'Nombres y apellidos del cónyuge', t:'text', s:4},
-    {id:'rlConyId', l:'Cédula o pasaporte del cónyuge', t:'text', s:3}, {id:'rlConyNac', l:'Nacionalidad del cónyuge', t:'text', s:3},
-  ]}, {table:{id:'acc', title:'Socios o accionistas (Art. 19.3)', cols:['Socio / accionista','C.I. / RUC','Nacionalidad','% participación','¿PEP? (Sí/No)'], rows:3, req:1}},
-    {fields:[{id:'benefFinal', l:'Beneficiario(s) final(es): persona(s) natural(es) con control (Art. 19.3)', t:'area', s:6, r:1}]}]},
+    {id:'rlId', l:'Cédula / pasaporte vigente', t:'text', s:2, r:1}, {id:'rlNac', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'rlSexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1},
+    {id:'rlCel', l:'Teléfono celular', t:'tel', s:2, r:1}, {id:'rlFijo', l:'Teléfono convencional', t:'tel', s:2, r:1}, {id:'rlDoc', l:'Documento que acredita la representación', t:'radio', o:['Nombramiento','Poder'], s:2, r:1},
+    {id:'rlCorreo', l:'Correo electrónico personal', t:'email', s:3, r:1}, {id:'rlCorreoInst', l:'Correo electrónico institucional', t:'email', s:3, r:1},
+    ]}, {sub:'Domicilio del representante legal'}, {fields:[
+    {id:'rlPais', l:'País', t:'text', s:2, r:1}, {id:'rlProvincia', l:'Provincia', t:'text', s:2, r:1}, {id:'rlCiudad', l:'Ciudad', t:'text', s:2, r:1},
+    {id:'rlCanton', l:'Cantón', t:'text', s:3, r:1}, {id:'rlParroquia', l:'Parroquia', t:'text', s:3, r:1},
+    {id:'rlCalle', l:'Calle principal', t:'text', s:3, r:1}, {id:'rlNumero', l:'Número', t:'text', s:1, r:1}, {id:'rlTransversal', l:'Calle secundaria', t:'text', s:2, r:1},
+    {id:'rlSector', l:'Sector', t:'text', s:2, r:1}, {id:'rlReferencia', l:'Referencia de ubicación', t:'text', s:4, r:1},
+  ]}, {table:{id:'acc', title:'Socios o accionistas con el 10% o más del capital social (Art. 19.3; Ley, Art. 92)', cols:['Socio / accionista','C.I. / RUC','Nacionalidad','% participación','¿PEP? (Sí/No)'], rows:3, req:1}},
+    {fields:[{id:'benefFinal', l:'Beneficiario(s) final(es) (Art. 19.3; Ley, Art. 92)', t:'area', s:6, r:1, hint:'Beneficiario final: persona natural con el 10% o más del capital, directa o indirectamente, o que controla la empresa por otros medios; si no hay ninguna, el funcionario de mayor rango gerencial (Ley, Art. 92).'}]}]},
   {title:'Información financiera (USD)', blocks:[{fields:[
     {id:'activos', l:'Total activos', t:'number', s:2, r:1}, {id:'pasivos', l:'Total pasivos', t:'number', s:2, r:1}, {id:'patrimonio', l:'Patrimonio neto (se calcula)', t:'number', s:2, ro:1},
     {id:'ingresos', l:'Ingreso mensual por la actividad', t:'number', s:3, r:1}, {id:'gastos', l:'Gasto mensual', t:'number', s:3, r:1},
@@ -317,7 +318,7 @@ CFG.sections.forEach(s => {
   html += `</div></section>`;
 });
 html += `<section class="card"><h2><span class="n"></span>Declaraciones</h2><div class="body decl">${CFG.decl.map(d=>`<label${d.who?` data-who="${d.who}"`:''}><input type="checkbox" id="${d.id}"> <span>${esc(d.t)}${d.opt?' <i>(solo si aplica)</i>':''}</span></label>`).join('')}</div></section>`;
-html += `<section class="card"><h2><span class="n"></span>Documentos que debe entregar con el formulario firmado</h2><div class="body"><ul class="docs" id="docsList"></ul></div></section>`;
+html += `<section class="card" data-nonum="1"><h2><span class="n"></span>Documentos que debe entregar con el formulario firmado</h2><div class="body"><ul class="docs" id="docsList"></ul></div></section>`;
 frm.innerHTML = html;
 
 function tipo(){ const r = document.querySelector('input[name=tipoPersona]:checked'); return r ? r.value : CFG.tipos[0].v; }
@@ -335,7 +336,7 @@ const fmtD = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v); return m ? `$
 function refresh(){
   document.querySelectorAll('[data-who]').forEach(el => el.hidden = el.dataset.who !== tipo());
   document.querySelectorAll('[data-dep]').forEach(el => { if (el.dataset.who && el.dataset.who !== tipo()) return; el.hidden = !depOk(JSON.parse(el.dataset.dep)); });
-  let k = 0; document.querySelectorAll('section.card').forEach(sec => { if (!sec.hidden) sec.querySelector('.n').textContent = (++k) + '.'; });
+  let k = 0; document.querySelectorAll('section.card').forEach(sec => { if (!sec.hidden && !sec.dataset.nonum) sec.querySelector('.n').textContent = (++k) + '.'; });
   document.getElementById('docsList').innerHTML = CFG.docs[tipo()].map(d=>`<li>${esc(d)}</li>`).join('');
 }
 const num = v => { const x = parseFloat(String(v).replace(/\s/g,'').replace(',', '.')); return isNaN(x) ? null : x; };
@@ -486,7 +487,7 @@ function buildPdf(){
   bar(`${++k}. DECLARACIONES Y FIRMAS`);
   CFG.decl.filter(d => whoOk(d.who)).forEach(d => para((document.getElementById(d.id).checked ? '[X] ' : '[  ] ') + d.t));
   signs(CFG.signers(t, val, fecha));
-  bar(`${++k}. DOCUMENTOS ADJUNTOS (marcar al recibir)`);
+  bar('DOCUMENTOS ADJUNTOS (marcar al recibir)');
   grid(['Recibido', 'Documento'], CFG.docs[t].map(d => ['[   ]', d]));
   y += 6;
   const io = CFG.internal(t);

@@ -158,7 +158,7 @@ const OTRA = {f:'quienPaga', v:'Otra persona'};
 const PAGOS = (opc, bf) => [
   {id:'quienPaga', l:'¿Quién realizará los pagos?', t:'radio', o:[opc, 'Otra persona'], s:6, r:1, hint:'Si paga otra persona, ella también debe llenar este formulario y la Declaración de Licitud de Fondos (F-03).'},
   {id:'pagNombre', l:'Nombre de la otra persona', t:'text', s:3, rd:1, dep:OTRA}, {id:'pagId', l:'Identificación', t:'text', s:3, rd:1, dep:OTRA},
-  {id:'pagRelacion', l:'Relación con el cliente', t:'text', s:6, rd:1, dep:OTRA},
+  {id:'pagRelacion', l:'Relación', t:'text', s:6, rd:1, dep:OTRA},
 ].concat(bf ? [
   {id:'cuentaPropia', l:'¿Actúa por cuenta propia?', t:'radio', o:['Sí','No, actúa a nombre de otra persona'], s:6, r:1},
   {id:'bfNombre', l:'Beneficiario final: nombres', t:'text', s:2, rd:1, dep:{f:'cuentaPropia', v:'No, actúa a nombre de otra persona'}},
@@ -243,32 +243,23 @@ const CFG = {
       {id:'sectorPj', l:'Sector', t:'text', s:2, r:1}, {id:'inmueblePj', l:'Edificio', t:'text', s:2}, {id:'codPostalPj', l:'Código postal', t:'text', s:2},
       {id:'referenciaPj', l:'Referencia de ubicación', t:'text', s:6, r:1},
     ]}]},
-    {who:'PJ', title:'Datos del representante legal', blocks:[{fields:[
+    {who:'PJ', title:'Datos del representante legal (Reglamento, Art. 30, 1.2.1)', blocks:[{fields:[
       {id:'rlApellidos', l:'Apellidos', t:'text', r:1}, {id:'rlNombres', l:'Nombres', t:'text', r:1},
-      {id:'rlId', l:'Cédula / pasaporte vigente', t:'text', s:3, r:1}, {id:'rlNac', l:'Nacionalidad', t:'text', s:3, r:1},
-      {id:'rlLugarFecha', l:'Lugar y fecha de nacimiento', t:'text', s:2, r:1}, {id:'rlSexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1},
-      {id:'rlEstado', l:'Estado civil', t:'select', o:['Soltero/a','Casado/a','Divorciado/a','Viudo/a','Separado/a','Unión libre'], s:2, r:1},
-      {id:'rlSepBienes', l:'Separación de bienes', t:'radio', o:SN, s:6, rd:1, dep:{f:'rlEstado', v:['Casado/a','Unión libre','Separado/a']}},
-      {id:'rlEstudios', l:'Nivel de estudios', t:'text', s:2}, {id:'rlPuesto', l:'Cargo', t:'text', s:2, r:1}, {id:'rlTel', l:'Teléfono celular / domicilio', t:'tel', s:2, r:1},
+      {id:'rlId', l:'Cédula / pasaporte vigente', t:'text', s:2, r:1}, {id:'rlNac', l:'Nacionalidad', t:'text', s:2, r:1}, {id:'rlSexo', l:'Sexo', t:'select', o:['Femenino','Masculino'], s:2, r:1},
+      {id:'rlCel', l:'Teléfono celular', t:'tel', s:2, r:1}, {id:'rlFijo', l:'Teléfono convencional', t:'tel', s:2, r:1}, {id:'rlDoc', l:'Documento que acredita la representación', t:'radio', o:['Nombramiento','Poder'], s:2, r:1},
       {id:'rlCorreo', l:'Correo electrónico personal', t:'email', s:3, r:1}, {id:'rlCorreoInst', l:'Correo electrónico institucional', t:'email', s:3, r:1},
     ]}, {sub:'Domicilio del representante legal'}, {fields:[
       {id:'rlPais', l:'País', t:'text', s:2, r:1}, {id:'rlProvincia', l:'Provincia', t:'text', s:2, r:1}, {id:'rlCiudad', l:'Ciudad', t:'text', s:2, r:1},
       {id:'rlCanton', l:'Cantón', t:'text', s:3, r:1}, {id:'rlParroquia', l:'Parroquia', t:'text', s:3, r:1},
-      {id:'rlCalle', l:'Calle principal', t:'text', s:3, r:1}, {id:'rlNumero', l:'Número', t:'text', s:1, r:1}, {id:'rlTransversal', l:'Calle transversal', t:'text', s:2, r:1},
+      {id:'rlCalle', l:'Calle principal', t:'text', s:3, r:1}, {id:'rlNumero', l:'Número', t:'text', s:1, r:1}, {id:'rlTransversal', l:'Calle secundaria', t:'text', s:2, r:1},
       {id:'rlSector', l:'Sector', t:'text', s:2, r:1}, {id:'rlReferencia', l:'Referencia de ubicación', t:'text', s:4, r:1},
-    ]}, {sub:'Información laboral del representante legal'}, {fields:[
-      {id:'rlTipoRel', l:'Tipo de relación laboral', t:'radio', o:['Independiente','Relación de dependencia'], s:3, r:1}, {id:'rlProfesion', l:'Profesión', t:'text', s:3, r:1},
-      {id:'rlActividad', l:'Actividad económica', t:'text', s:3, r:1}, {id:'rlEmpresa', l:'Nombre de la empresa', t:'text', s:3, r:1},
-      {id:'rlCargoLab', l:'Cargo', t:'text', s:2, r:1}, {id:'rlFechaIniAct', l:'Fecha de inicio de actividad', t:'date', s:2, r:1}, {id:'rlTelLab', l:'Teléfono / extensión', t:'tel', s:2, r:1},
-      {id:'rlLabPais', l:'País', t:'text', s:2, r:1}, {id:'rlLabProvincia', l:'Provincia', t:'text', s:2, r:1}, {id:'rlLabCiudad', l:'Ciudad', t:'text', s:2, r:1},
-      {id:'rlLabCalle', l:'Calle principal', t:'text', s:3, r:1}, {id:'rlLabNumero', l:'Número', t:'text', s:1, r:1}, {id:'rlLabTransversal', l:'Calle secundaria', t:'text', s:2, r:1},
     ]}, {sub:'Información financiera del representante legal (USD)'}, {fields:[
       {id:'rlIngreso', l:'Ingreso mensual', t:'number', s:2, r:1}, {id:'rlEgreso', l:'Egreso mensual', t:'number', s:2, r:1}, {id:'rlFuente', l:'Fuente de ingresos', t:'text', s:2, r:1},
       {id:'rlActivos', l:'Total activos', t:'number', s:2, r:1}, {id:'rlPasivos', l:'Total pasivos', t:'number', s:2, r:1}, {id:'rlPatrimonio', l:'Total patrimonio (se calcula)', t:'number', s:2, ro:1},
     ]}, {table:{id:'autorizados', title:'Personas autorizadas para actuar en nombre del cliente: firmas autorizadas o apoderados (Ley, Art. 43.b). Si no hay otras personas, escriba N/A', cols:['Nombres y apellidos','Identificación','Cargo','Documento que lo autoriza (nombramiento / poder)'], rows:2, req:1}}]},
     {who:'PJ', title:'Estructura accionaria y de control (Art. 19; Ley, Art. 44)', blocks:[
-      {table:{id:'pnSocios', title:'Socios o accionistas personas naturales (Reglamento, Art. 30, 1.2.j y 1.3): escriba a cada persona una sola vez, sea socia directa, socia a través de otra empresa socia, o que controle la empresa sin ser socia. Las empresas socias van en la tabla siguiente', cols:['Nombres y apellidos','¿Cómo participa? (socio directo / a través de otra empresa / controla sin ser socio)','Empresa a través de la cual participa (si aplica)','% de participación','Identificación','RUC / RUP (si tiene)','Sexo','Nacionalidad','Actividad o cargo','Ingreso mensual (USD)','¿PEP? (Sí/No)','Dirección completa (provincia, ciudad, cantón, parroquia, sector, calles, numeración y referencia)','Teléfono','Correo electrónico'], rows:2, req:1}},
-      {table:{id:'acc', title:'Socios o accionistas que son empresas (personas jurídicas). Si no hay, escriba N/A', cols:['Razón social','RUC','Nacionalidad','% de participación','¿Vinculada a un PEP? (Sí/No)'], rows:2, req:1}},
+      {table:{id:'pnSocios', title:'Socios o accionistas personas naturales con el 10% o más del capital social (Ley, Art. 92; Reglamento, Art. 30, 1.2.j y 1.3): escriba a cada persona una sola vez, sea socia directa o a través de otra empresa socia, o que controle la empresa por otros medios; si ninguna cumple, registre al funcionario de mayor rango gerencial. Las empresas socias van en la tabla siguiente', cols:['Nombres y apellidos','¿Cómo participa? (socio directo / a través de otra empresa / controla sin ser socio)','Empresa a través de la cual participa (si aplica)','% de participación','Identificación','RUC / RUP (si tiene)','Sexo','Nacionalidad','Actividad o cargo','Ingreso mensual (USD)','¿PEP? (Sí/No)','Dirección completa (provincia, ciudad, cantón, parroquia, sector, calles, numeración y referencia)','Teléfono','Correo electrónico'], rows:2, req:1}},
+      {table:{id:'acc', title:'Socios o accionistas que son empresas (personas jurídicas) con el 10% o más del capital social. Si no hay, escriba N/A', cols:['Razón social','RUC','Nacionalidad','% de participación','¿Vinculada a un PEP? (Sí/No)'], rows:2, req:1}},
       {table:{id:'ger', title:'Alta gerencia (Art. 19.2): indique los datos de las personas que dirigen la empresa, como gerente general, presidente, miembros del directorio y apoderados generales', cols:['Nombres y apellidos','Identificación','Cargo','Nacionalidad'], rows:2, req:1}},
       {fields:[{id:'esFid', l:'¿La entidad es un fideicomiso?', t:'radio', o:SN, s:6, r:1},
         {id:'fiduciaria', l:'Fiduciaria', t:'text', s:3, rd:1, dep:{f:'esFid', v:'Sí'}}, {id:'claseFid', l:'Clase de fideicomiso', t:'text', s:3, rd:1, dep:{f:'esFid', v:'Sí'}},
@@ -286,8 +277,8 @@ const CFG = {
     {who:'PN', title:'Beneficiario final', blocks:[{fields:PAGOS('Cliente directo o cónyuge', true).filter(f => !['quienPaga','pagNombre','pagId','pagRelacion'].includes(f.id))}]},
     {title:'Referencias', blocks:[
       {table:{id:'refBanc', title:'Referencias bancarias y/o financieras', cols:['Institución','Número de cuenta o tarjeta','Tipo de cuenta o tarjeta'], rows:2, req:1}},
-      {table:{id:'refPers', who:'PN', title:'Referencias personales o comerciales', cols:['Nombres y apellidos','Relación con el cliente','Teléfono de contacto'], rows:2, req:1}},
-      {table:{id:'refCorp', who:'PJ', title:'Referencias corporativas (proveedores / clientes)', cols:['Nombres y apellidos','Relación con el cliente','Teléfono de contacto'], rows:2, req:1}},
+      {table:{id:'refPers', who:'PN', title:'Referencias personales o comerciales', cols:['Nombres y apellidos','Relación','Teléfono de contacto'], rows:2, req:1}},
+      {table:{id:'refCorp', who:'PJ', title:'Referencias corporativas (proveedores / clientes)', cols:['Nombres y apellidos','Relación','Teléfono de contacto'], rows:2, req:1}},
     ]},
     {title:'Declaración de Persona Expuesta Políticamente (PEP)', blocks:[
       {fields:PEP_CLI('')}, {table:PEP_TAB_CLI('')},
@@ -298,8 +289,8 @@ const CFG = {
   calcs: [{target:'patrimonio', sum:['activos'], minus:['pasivos']}, {target:'patrimonioPj', sum:['activosPj'], minus:['pasivosPj']}, {target:'rlPatrimonio', sum:['rlActivos'], minus:['rlPasivos']}],
   decl: [{id:'d1', t:ORIGEN}, {id:'d2', t:DATOS}],
   docs: {
-    PN:['Copia del documento de identificación (cédula de ciudadanía, pasaporte o RUC)','Copia de la visa o permiso de ingreso y permanencia temporal (extranjeros no residentes en el Ecuador)','Copia del documento de identificación del cónyuge (si aplica)','Copia del RUC (si tiene)','Copia de al menos un recibo de cualquiera de los servicios básicos','Declaración del impuesto a la renta del último ejercicio (si aplica)','Declaración de Licitud de Fondos y Registro de Pagos (F-03)','Soportes del origen de los fondos, cuando se aplique debida diligencia reforzada (Art. 20.3)'],
-    PJ:['Copia del Registro Único de Contribuyentes','Copia del documento de identificación de otras personas autorizadas a representar la compañía (si aplica)','Copia del documento de identificación de las personas que sean firmas autorizadas de la compañía','Copia de al menos un recibo de cualquiera de los servicios básicos','Certificado de cumplimiento de obligaciones y existencia legal (Superintendencia de Compañías), no mayor a 30 días','Escritura de constitución o estatutos y nombramiento del representante legal (Art. 19)','Nómina actualizada de socios o accionistas e identificación de los beneficiarios finales (Art. 19.3)','Estados financieros del último ejercicio o declaración del impuesto a la renta','Declaración de Licitud de Fondos y Registro de Pagos (F-03)'],
+    PN:['Copia del documento de identificación (cédula de ciudadanía, pasaporte o RUC)','Copia de la visa o permiso de ingreso y permanencia temporal (extranjeros no residentes en el Ecuador)','Copia del documento de identificación del cónyuge (si aplica)','Copia del RUC (si tiene)','Copia de al menos un recibo de cualquiera de los servicios básicos','Declaración del impuesto a la renta del último ejercicio (si aplica)','Soportes del origen de los fondos, cuando se aplique debida diligencia reforzada (Art. 20.3)'],
+    PJ:['Copia del Registro Único de Contribuyentes','Copia del documento de identificación de otras personas autorizadas a representar la compañía (si aplica)','Copia del documento de identificación de las personas que sean firmas autorizadas de la compañía','Copia de al menos un recibo de cualquiera de los servicios básicos','Certificado de cumplimiento de obligaciones y existencia legal (Superintendencia de Compañías), no mayor a 30 días','Escritura de constitución o estatutos y nombramiento del representante legal (Art. 19)','Nómina actualizada de socios o accionistas e identificación de los beneficiarios finales (Art. 19.3)','Estados financieros del último ejercicio o declaración del impuesto a la renta'],
   },
   signers: (t, val, fecha) => t === 'PN'
     ? [['Firma del cliente', 'Nombre: ' + (val('nombres') + ' ' + val('apellidos')).trim(), 'C.I.: ' + val('numId'), 'Fecha: ' + fecha], ['Firma de quien recibe la información', 'Nombre:', 'Fecha:']]
@@ -367,7 +358,7 @@ CFG.sections.forEach(s => {
   html += `</div></section>`;
 });
 html += `<section class="card"><h2><span class="n"></span>Declaraciones</h2><div class="body decl">${CFG.decl.map(d=>`<label${d.who?` data-who="${d.who}"`:''}><input type="checkbox" id="${d.id}"> <span>${esc(d.t)}${d.opt?' <i>(solo si aplica)</i>':''}</span></label>`).join('')}</div></section>`;
-html += `<section class="card"><h2><span class="n"></span>Documentos que debe entregar con el formulario firmado</h2><div class="body"><ul class="docs" id="docsList"></ul></div></section>`;
+html += `<section class="card" data-nonum="1"><h2><span class="n"></span>Documentos que debe entregar con el formulario firmado</h2><div class="body"><ul class="docs" id="docsList"></ul></div></section>`;
 frm.innerHTML = html;
 
 function tipo(){ const r = document.querySelector('input[name=tipoPersona]:checked'); return r ? r.value : CFG.tipos[0].v; }
@@ -385,7 +376,7 @@ const fmtD = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v); return m ? `$
 function refresh(){
   document.querySelectorAll('[data-who]').forEach(el => el.hidden = el.dataset.who !== tipo());
   document.querySelectorAll('[data-dep]').forEach(el => { if (el.dataset.who && el.dataset.who !== tipo()) return; el.hidden = !depOk(JSON.parse(el.dataset.dep)); });
-  let k = 0; document.querySelectorAll('section.card').forEach(sec => { if (!sec.hidden) sec.querySelector('.n').textContent = (++k) + '.'; });
+  let k = 0; document.querySelectorAll('section.card').forEach(sec => { if (!sec.hidden && !sec.dataset.nonum) sec.querySelector('.n').textContent = (++k) + '.'; });
   document.getElementById('docsList').innerHTML = CFG.docs[tipo()].map(d=>`<li>${esc(d)}</li>`).join('');
 }
 const num = v => { const x = parseFloat(String(v).replace(/\s/g,'').replace(',', '.')); return isNaN(x) ? null : x; };
@@ -536,7 +527,7 @@ function buildPdf(){
   bar(`${++k}. DECLARACIONES Y FIRMAS`);
   CFG.decl.filter(d => whoOk(d.who)).forEach(d => para((document.getElementById(d.id).checked ? '[X] ' : '[  ] ') + d.t));
   signs(CFG.signers(t, val, fecha));
-  bar(`${++k}. DOCUMENTOS ADJUNTOS (marcar al recibir)`);
+  bar('DOCUMENTOS ADJUNTOS (marcar al recibir)');
   grid(['Recibido', 'Documento'], CFG.docs[t].map(d => ['[   ]', d]));
   y += 6;
   const io = CFG.internal(t);

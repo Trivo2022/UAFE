@@ -230,7 +230,7 @@ CFG.sections.forEach(s => {
   html += `</div></section>`;
 });
 html += `<section class="card"><h2><span class="n"></span>Declaraciones</h2><div class="body decl">${CFG.decl.map(d=>`<label${d.who?` data-who="${d.who}"`:''}><input type="checkbox" id="${d.id}"> <span>${esc(d.t)}${d.opt?' <i>(solo si aplica)</i>':''}</span></label>`).join('')}</div></section>`;
-html += `<section class="card"><h2><span class="n"></span>Documentos que debe entregar con el formulario firmado</h2><div class="body"><ul class="docs" id="docsList"></ul></div></section>`;
+html += `<section class="card" data-nonum="1"><h2><span class="n"></span>Documentos que debe entregar con el formulario firmado</h2><div class="body"><ul class="docs" id="docsList"></ul></div></section>`;
 frm.innerHTML = html;
 
 function tipo(){ const r = document.querySelector('input[name=tipoPersona]:checked'); return r ? r.value : CFG.tipos[0].v; }
@@ -248,7 +248,7 @@ const fmtD = v => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v); return m ? `$
 function refresh(){
   document.querySelectorAll('[data-who]').forEach(el => el.hidden = el.dataset.who !== tipo());
   document.querySelectorAll('[data-dep]').forEach(el => { if (el.dataset.who && el.dataset.who !== tipo()) return; el.hidden = !depOk(JSON.parse(el.dataset.dep)); });
-  let k = 0; document.querySelectorAll('section.card').forEach(sec => { if (!sec.hidden) sec.querySelector('.n').textContent = (++k) + '.'; });
+  let k = 0; document.querySelectorAll('section.card').forEach(sec => { if (!sec.hidden && !sec.dataset.nonum) sec.querySelector('.n').textContent = (++k) + '.'; });
   document.getElementById('docsList').innerHTML = CFG.docs[tipo()].map(d=>`<li>${esc(d)}</li>`).join('');
 }
 const num = v => { const x = parseFloat(String(v).replace(/\s/g,'').replace(',', '.')); return isNaN(x) ? null : x; };
@@ -399,7 +399,7 @@ function buildPdf(){
   bar(`${++k}. DECLARACIONES Y FIRMAS`);
   CFG.decl.filter(d => whoOk(d.who)).forEach(d => para((document.getElementById(d.id).checked ? '[X] ' : '[  ] ') + d.t));
   signs(CFG.signers(t, val, fecha));
-  bar(`${++k}. DOCUMENTOS ADJUNTOS (marcar al recibir)`);
+  bar('DOCUMENTOS ADJUNTOS (marcar al recibir)');
   grid(['Recibido', 'Documento'], CFG.docs[t].map(d => ['[   ]', d]));
   y += 6;
   const io = CFG.internal(t);
