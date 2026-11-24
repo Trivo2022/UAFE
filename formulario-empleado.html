@@ -166,7 +166,7 @@ const CFG = {
       {id:'sepConyugal', l:'Separación de la sociedad conyugal', t:'radio', o:SN, s:3, r:1}, {id:'sexo', l:'Sexo', t:'radio', o:['Femenino','Masculino'], s:3, r:1},
       {id:'profesion', l:'Profesión u oficio (Art. 21.4)', t:'text', s:6, r:1},
     ]}]},
-    {title:'Identidad personal de los accionistas o socios', dep:{f:'calidad', v:'Socio / accionista'}, note:'Solo si el socio o accionista es persona jurídica y posee el 25% o más del capital social.', blocks:[
+    {title:'Identidad personal de los accionistas o socios', dep:{f:'calidad', v:'Socio / accionista'}, note:'Si el socio o accionista es persona jurídica, detalle a sus accionistas hasta llegar a las personas naturales.', blocks:[
       {table:{id:'acc', cols:['Apellidos y nombres','Cédula / pasaporte / RUC','% participación','Nacionalidad','Actividad / cargo','Dirección','Teléfono / celular'], rows:2}}]},
     {title:'Información de residencia', blocks:[{fields:[
       {id:'pais', l:'País', t:'text', s:2, r:1}, {id:'provincia', l:'Provincia', t:'text', s:2, r:1}, {id:'canton', l:'Cantón', t:'text', s:2, r:1},
@@ -193,7 +193,7 @@ const CFG = {
       {id:'pepCargo', l:'Cargo', t:'text', s:2, rd:1, dep:{f:'esPep', v:'Sí'}}, {id:'pepFechaNom', l:'Fecha de nombramiento', t:'date', s:2, rd:1, dep:{f:'esPep', v:'Sí'}},
       {id:'pepEnFunciones', l:'¿A la presente fecha se encuentra en funciones?', t:'radio', o:SN, s:2, rd:1, dep:{f:'esPep', v:'Sí'}},
       {id:'pepFechaFin', l:'Fecha de culminación del cargo (si no está en funciones)', t:'date', s:6, dep:{f:'esPep', v:'Sí'}},
-      {id:'famPep', l:'¿Usted tiene algún familiar (hasta el 4º grado de consanguinidad o 2º de afinidad) que desempeña o ha desempeñado en los últimos 3 años ' + CARGOS + '?', t:'radio', o:SN, s:6, r:1},
+      {id:'famPep', l:'¿Su cónyuge o pareja en unión de hecho, o algún familiar suyo (hasta el 4º grado de consanguinidad o 2º de afinidad), desempeña o ha desempeñado en los últimos 3 años ' + CARGOS + '?', t:'radio', o:SN, s:6, r:1},
     ]}, {table:{id:'famPeps', cols:['Apellidos y nombres','Parentesco','Cargo','Fecha de nombramiento','¿En funciones? (Sí/No)','Fecha de culminación (si no está en funciones)'], types:['text','text','text','date','text','date'], rows:2, req:1, dep:{f:'famPep', v:'Sí'}}},
       {fields:[{id:'colPep', l:'¿Usted ha trabajado, colaborado o es socio de alguna persona que desempeña o ha desempeñado ' + CARGOS + '?', t:'radio', o:SN, s:6, r:1}]},
       {table:{id:'colPeps', cols:['Apellidos y nombres','Cargo de la persona con la que colaboró','Cargo que usted ejerce o ejerció con la persona','Desde','Hasta'], types:['text','text','text','date','date'], rows:2, req:1, dep:{f:'colPep', v:'Sí'}}}]},
