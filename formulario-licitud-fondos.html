@@ -155,7 +155,7 @@ const CFG = {
   sections: [
     {title:'Datos del cliente', blocks:[{fields:[
       {id:'fecha', l:'Fecha', t:'date', s:2, r:1}, {id:'ciRuc', l:'Cédula o RUC', t:'text', s:2, r:1}, {id:'cliente', l:'Cliente', t:'text', s:2, r:1},
-      {id:'unidad', l:'Departamento o local Nº', t:'text', s:2, r:1}, {id:'vendedor', l:'Vendedor', t:'text', s:2, r:1}, {id:'telefonos', l:'Teléfonos domicilio', t:'tel', s:2, r:1},
+      {id:'unidad', l:'Proyecto / unidad vendida', t:'text', s:2, r:1}, {id:'vendedor', l:'Asesor comercial', t:'text', s:2, r:1}, {id:'telefonos', l:'Teléfonos domicilio', t:'tel', s:2, r:1},
       {id:'direccion', l:'Dirección domicilio', t:'text', s:6, r:1},
     ]}]},
     {title:'Origen de los fondos (Art. 9.2)', blocks:[{fields:[
@@ -163,7 +163,7 @@ const CFG = {
       {id:'origenDesc', l:'Descripción del origen', t:'area', s:4, r:1}, {id:'paisFondos', l:'País de origen de los fondos', t:'text', s:2, r:1},
     ]}]},
     {title:'Detalle de valores', note:'Registre cada pago. Forma de pago: transferencia, cheque, crédito, tarjeta, efectivo, bienes o transferencia del exterior. La Ley (Art. 33) prohíbe pagar en efectivo, piedras o metales preciosos operaciones de USD 10.000 o más.', blocks:[
-      {table:{id:'pagos', types:['date'], cols:['Fecha','Valor USD','Forma de pago','Ciudad de pago','Banco','Cuenta','Nº','Nombre de quien paga','C.I. / RUC de quien paga','Parentesco con el cliente'], rows:4, req:1}},
+      {table:{id:'pagos', types:['date'], cols:['Fecha','Valor USD','Concepto (comisión / reserva / canon)','Forma de pago','Ciudad de pago','Banco','Cuenta','Nº','Nombre de quien paga','C.I. / RUC de quien paga','Parentesco con el cliente'], rows:4, req:1}},
       {fields:[{id:'totalPagos', l:'Total (USD)', t:'number', s:2, ro:1}, {id:'observaciones', l:'Observaciones', t:'area', s:4}]},
     ]},
   ],
@@ -175,7 +175,7 @@ const CFG = {
     title: 'USO INTERNO – OFICIAL DE CUMPLIMIENTO',
     pre: [['¿Los pagos son coherentes con el perfil económico y transaccional del cliente? (Art. 9.2)', ck('Sí') + '   ' + ck('No – analizar como operación inusual')],
           ['¿Pagos de otra persona? ¿Se recibió su formulario Conozca a su Cliente?', ck('No hay terceros') + '   ' + ck('Sí, recibido') + '   ' + ck('Sí, pendiente')],
-          ['Acumulado del cliente en los últimos 30 días (USD) – Art. 27.2', '______________      ¿USD 10.000 o más? Incluir en RESU:  ' + ck('Sí') + '  ' + ck('No')],
+          ['Acumulado del cliente en los últimos 30 días (USD) – Art. 27.2', '______________      ¿USD 10.000 o más? Reforzar controles:  ' + ck('Sí') + '  ' + ck('No')],
           ['¿Pago en efectivo, del exterior, fraccionado o precancelación sin justificar?', ck('No') + '   ' + ck('Sí – señal de alerta')]],
     lists: LISTAS, listsTitle: 'Consulta de listas de quien paga (si es distinto del cliente)',
     pairs: [['Conclusión del análisis', '\n\n']],
