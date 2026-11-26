@@ -103,7 +103,6 @@ ul.docs{margin:0;padding-left:20px;display:grid;gap:3px;font-size:.9rem}
 <div class="bar"><div class="wrap">
   <span class="msg" id="msg">Complete el formulario y descargue el PDF para firmar.</span>
   <button type="button" class="btn ghost" id="btnClear">Borrar todo</button>
-  <button type="button" class="btn ghost" id="btnPrint" hidden>Imprimir</button>
   <button type="button" class="btn" id="btnPdf">Descargar PDF para firmar</button>
 </div></div>
 
@@ -497,8 +496,6 @@ function buildPdf(){
 const inClaude = typeof window.claude !== 'undefined' && window.claude && typeof window.claude.use === 'function';
 let downloads = null;
 if (inClaude) window.claude.use('downloads').then(d => { downloads = d; }).catch(() => {});
-else document.getElementById('btnPrint').hidden = false;
-document.getElementById('btnPrint').addEventListener('click', () => { try { window.print(); } catch(e) {} });
 document.getElementById('btnPdf').addEventListener('click', async () => {
   const missing = validate();
   if (missing) { setMsg(`Faltan ${missing} dato(s) obligatorio(s), marcados en rojo. Complételos para generar el PDF.`, 'err'); return; }
